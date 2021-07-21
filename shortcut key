@@ -1,0 +1,23 @@
+file->setting->keymap->eclipse
+
+ctrl +d 删除一行
+shift + enter 快速换行
+ctrl + shift + r 查找文件
+ctrl + shift + t 查找对象
+ctrl + H 全局搜索
+快速切换编辑的文件：Ctrl+E快捷键
+快速定位光标位置的某个类、方法和属性 F3
+显示类的继承关系，并打开类继承视图 F4
+alt + ↑ ↓ 移动一行
+ctrl+l 定位到当前编辑器的某一行
+open call hierarchy查询方法调用 ctrl + alt + H
+重构-重命名：Alt+Shift+R
+Alt+/ 查看一个方法可以传什么参数
+
+
+idea:
+选中new 对象名（） ctrl + alt + v  快速new对象
+ctrl + shift + f12 最大化窗口
+Ctrl+Alt+left/right，返回至上次浏览的位置
+ctrl + shift + f4 关闭所有文件
+alt + enter 导入包
