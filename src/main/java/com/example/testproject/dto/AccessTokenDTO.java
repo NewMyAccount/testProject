@@ -43,4 +43,5 @@ public class AccessTokenDTO {
     public void setRedirect_uri(String redirect_uri) {
         this.redirect_uri = redirect_uri;
     }
+
 }

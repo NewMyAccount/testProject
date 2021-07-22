@@ -12,7 +12,6 @@ alt + ↑ ↓ 移动一行
 ctrl+l 定位到当前编辑器的某一行
 open call hierarchy查询方法调用 ctrl + alt + H
 重构-重命名：Alt+Shift+R
-Alt+/ 查看一个方法可以传什么参数
 
 
 idea:
@@ -21,3 +20,4 @@ ctrl + shift + f12 最大化窗口
 Ctrl+Alt+left/right，返回至上次浏览的位置
 ctrl + shift + f4 关闭所有文件
 alt + enter 导入包
+alt+ insert 生成generate方法
