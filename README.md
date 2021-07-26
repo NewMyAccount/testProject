@@ -12,7 +12,11 @@
 
 [API下载](https://blog.csdn.net/qq_19877501/article/details/108578369)
 
-[OAuth Apps](https://docs.github.com/en/developers/apps/building-oauth-apps)
+[OAuth App认证](https://docs.github.com/en/developers/apps/building-oauth-apps)
+
+[spring 文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
+
+[Mybatis SpringBoot](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 
 [okhttp：一个处理网络请求的开源项目](https://square.github.io/okhttp/) 
 ##工具
@@ -25,3 +29,10 @@
 [tomcat](https://tomcat.apache.org)
 
 [visual paradigm](https://www.visual-paradigm.com)
+
+[Mysql](https://www.runoob.com/mysql/mysql-tutorial.html)
+
+[H2 database](https://h2database.com/html/main.html)
+
+
+##tomcat、 spring、 spring mvc、 servlet、jvm 关系和联系 
