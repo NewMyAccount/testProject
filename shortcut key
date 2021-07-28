@@ -12,7 +12,7 @@ alt + ↑ ↓ 移动一行
 ctrl+l 定位到当前编辑器的某一行
 open call hierarchy查询方法调用 ctrl + alt + H
 重构-重命名：Alt+Shift+R
-
+alt + shift + ↑ ↓ 快速选中单词（可以扩大缩小选中）
 
 idea:
 选中new 对象名（） ctrl + alt + v  快速new对象
