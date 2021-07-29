@@ -36,9 +36,20 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-
+        if (title == null || "".equals(title)) {
+            model.addAttribute("error", "title不能为空");
+            return "publish";
+        }
+        if (description == null || "".equals(description)) {
+            model.addAttribute("error", "description不能为空");
+            return "publish";
+        }
+        if (tag == null || "".equals(tag)) {
+            model.addAttribute("error", "tag不能为空");
+            return "publish";
+        }
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null){
+        if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
         }

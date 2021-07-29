@@ -56,13 +56,14 @@ public class AuthorizeController {
 //        System.out.println(githubUser.getName());
 //        System.out.println(githubUser.getId());
 
-        if (githubUser != null) {
+        if (accessToken != null && githubUser != null) {
             User user = new User();
             //生成token
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             //把session写到数据库中
