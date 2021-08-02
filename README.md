@@ -19,6 +19,8 @@
 [Mybatis SpringBoot](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 
 [okhttp：一个处理网络请求的开源项目](https://square.github.io/okhttp/) 
+
+[thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 ##工具
 [git](https://git-scm.com)
 

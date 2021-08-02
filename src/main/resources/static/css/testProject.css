@@ -1,13 +1,24 @@
-body{
+body {
     background-color: #8e9ba8;
 }
 
-.main{
+.main {
     background-color: white;
-    margin:30px;
+    margin: 30px;
 }
 
-.btn-publish{
+.btn-publish {
     float: right;
     margin-bottom: 15px;
+}
+
+.avatar {
+    width: 55px;
+    height: 55px;
+}
+
+.comment {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999999;
 }

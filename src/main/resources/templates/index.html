@@ -7,6 +7,7 @@
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/testProject.css">
 <!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 </head>
 <body>
@@ -19,7 +20,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
             </button>
-            <a class="navbar-brand" href="#">导航</a>
+            <a class="navbar-brand" href="/">导航</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -49,5 +50,32 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
+<div class="container-fluid main">
+    <!--    将最外面的布局元素 .container 修改为 .container-fluid，就可以将固定宽度的栅格布局转换为 100% 宽度的布局。-->
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
+            <hr>
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="img-rounded avatar" src="https://avatars.githubusercontent.com/u/11730363?v=4" alt="...">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">张晶好自私</h4>
+                    点击进入看内容<br>
+                    <span class="comment">24个回复 • 25个浏览 • 最后回复时间：</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>热点话题</h3>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

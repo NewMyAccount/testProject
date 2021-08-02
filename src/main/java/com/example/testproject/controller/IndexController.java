@@ -25,21 +25,22 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (cookies == null){
-            return "index";
-        }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                //用传到服务器端的reqeust.cookie获取token，然后查询数据库校验session是否存在
-                User user = userMapper.findByToken(token);
-                if (user != null) {
-                    //把user对象写入session
-                    request.getSession().setAttribute("user", user);
+        if (cookies != null && cookies.length != 0){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    //用传到服务器端的reqeust.cookie获取token，然后查询数据库校验session是否存在
+                    User user = userMapper.findByToken(token);
+                    if (user != null) {
+                        //把user对象写入session
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
+
+
         return "index";
     }
 
