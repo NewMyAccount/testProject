@@ -1,7 +1,10 @@
 package com.example.testproject.controller;
 
+import com.example.testproject.dto.QuestionDTO;
+import com.example.testproject.mapper.QuestionMapper;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.User;
+import com.example.testproject.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: 张昕
@@ -21,11 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request) {
+    public String index(HttpServletRequest request, Model model) {
         Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0){
+        if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -39,8 +45,8 @@ public class IndexController {
                 }
             }
         }
-
-
+        List<QuestionDTO> questionDTOList = questionService.list();
+        model.addAttribute("questions", questionDTOList);
         return "index";
     }
 

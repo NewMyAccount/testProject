@@ -53,8 +53,6 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(rediretUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-//        System.out.println(githubUser.getName());
-//        System.out.println(githubUser.getId());
 
         if (accessToken != null && githubUser != null) {
             User user = new User();
@@ -73,6 +71,8 @@ public class AuthorizeController {
             //request.getSession().setAttribute("githubUser", githubUser);
             return "redirect:/";
         } else {
+            System.out.println("accessToken:" + accessToken);
+            System.out.println("githubUser:" + githubUser);
             return "redirect:/";
         }
     }

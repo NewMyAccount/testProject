@@ -57,16 +57,20 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
             <hr>
-            <div class="media">
+            <div class="media" th:each="question: ${questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="img-rounded avatar" src="https://avatars.githubusercontent.com/u/11730363?v=4" alt="...">
+                        <img class="img-rounded avatar" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">张晶好自私</h4>
-                    点击进入看内容<br>
-                    <span class="comment">24个回复 • 25个浏览 • 最后回复时间：</span>
+                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <span th:text="${question.description}"></span><br>
+                    <span class="comment">
+                        <span th:text="${question.commentCount}"></span><span>个回复</span>
+                        <span th:text="${question.viewCount}"></span><span>次浏览·</span>
+                        <span th:text="${#dates.format(question.getGmtModified(), 'dd MMMM yyyy')}">1小时前</span>
+                    </span>
                 </div>
             </div>
 
