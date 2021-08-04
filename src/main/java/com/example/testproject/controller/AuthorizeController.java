@@ -47,14 +47,13 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code, HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id(clientId);
-        accessTokenDTO.setClient_secret(clientSecret);
+        accessTokenDTO.setClientId(clientId);
+        accessTokenDTO.setClientSecret(clientSecret);
         accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirect_uri(rediretUri);
+        accessTokenDTO.setRedirectUri(rediretUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-
-        if (accessToken != null && githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             //生成token
             String token = UUID.randomUUID().toString();
