@@ -12,45 +12,7 @@
 </head>
 <body>
 <!--<p th:text="'Hello, ' + ${name} + '!'"/>-->
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-            </button>
-            <a class="navbar-brand" href="/">导航</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="搜索问题">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li th:if="${session.user} != null"><a href="/publish">发布</a></li>
-                <li th:if="${session.user} == null">
-                    <a href="https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
-                </li>
-                <li th:unless="${session.user} == null" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">消息中心</a></li>
-                        <li><a href="#">个人资料</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">退出登录</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-
+<div th:insert="navigation :: navigation"></div>
 <div class="container-fluid main">
     <!--    将最外面的布局元素 .container 修改为 .container-fluid，就可以将固定宽度的栅格布局转换为 100% 宽度的布局。-->
     <div class="row">
@@ -66,7 +28,7 @@
                 <div class="media-body">
                     <h4 class="media-heading" th:text="${question.title}"></h4>
                     <span th:text="${question.description}"></span><br>
-                    <span class="comment">
+                    <span class="comment" id="comment">
                         <span th:text="${question.commentCount}"></span><span>个回复</span>
                         <span th:text="${question.viewCount}"></span><span>次浏览·</span>
                         <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
@@ -107,8 +69,6 @@
             </li>
         </ul>
     </nav>
-
-
 </div>
 
 </body>

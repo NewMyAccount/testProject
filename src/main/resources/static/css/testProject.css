@@ -22,3 +22,8 @@ body {
     font-weight: normal;
     color: #999999;
 }
+
+.myModal {
+    margin-top: 200px;
+    width: 300px;
+}
