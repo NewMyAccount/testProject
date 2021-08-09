@@ -37,7 +37,7 @@ public class IndexController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    //用传到服务器端的reqeust.cookie获取token，然后查询数据库校验session是否存在
+                    //用传到服务器端的request.cookie获取token，然后查询数据库校验session是否存在
                     User user = userMapper.findByToken(token);
                     if (user != null) {
                         //把user对象写入session

@@ -36,7 +36,7 @@
                                         <h4 class="modal-title">登陆方式</h4>
                                     </div>
                                     <div class="modal-body" style="text-align:center">
-                                        <a href="https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
+                                        <a href="http://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=SmzQr4CAxTazikFlwnfCGvmzFLSzlIXL&redirect_uri=http://localhost:8887/baiducallback&scope=basic,netdisk&display=page&qrcode=1">
                                             <img src="https://www.mawen.co/images/gitee.png">
                                         </a>
                                         <a href="https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
@@ -53,7 +53,10 @@
                     </li>
                     <li th:unless="${session.user} == null" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false" th:value="${session.user.getName()}"><span class="caret"></span></a>
+                           aria-expanded="false">
+                            <span th:text="${session.user.name}"></span>
+                            <span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu">
                             <li><a href="#">消息中心</a></li>
                             <li><a href="#">个人资料</a></li>

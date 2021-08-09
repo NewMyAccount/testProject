@@ -32,6 +32,7 @@ public class QuestionService {
     private Integer page;
 
     public PaginationDTO list(Integer page, Integer size) {
+        //查找总页数
         Integer totolNumber = questionMapper.findTotolNumber();
         if (page < 1) {
             this.page = 1;
@@ -40,6 +41,7 @@ public class QuestionService {
         } else {
             this.page = page;
         }
+        //偏移量，从第几个数据开始找
         Integer offset = size * (this.page - 1);
         List<Question> questionList = questionMapper.select(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();

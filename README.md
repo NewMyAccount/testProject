@@ -1,5 +1,7 @@
 ## zhangxin
+
 ##资料
+
 [spring资料](https://spring.io)
 
 [spring web](https://spring.io/guides/gs/serving-web-content)
@@ -21,7 +23,9 @@
 [okhttp：一个处理网络请求的开源项目](https://square.github.io/okhttp/) 
 
 [thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+
 ##工具
+
 [git](https://git-scm.com)
 
 [maven](https://maven.apache.org)
@@ -39,6 +43,7 @@
 [flyway--管理数据库版本](https://flywaydb.org/)
 
 [lombok](https://projectlombok.org/)
+
 ##tomcat、 spring、 spring mvc、 servlet、jvm 关系和联系 
 
 ##脚本
