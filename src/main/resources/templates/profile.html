@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>张昕的前端页面</title>
+    <title>${sectionName}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/jquery-3.3.1.js"></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/testProject.css">
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/testProject.css">
     <!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 </head>
 <body>
@@ -17,7 +17,7 @@
     <!--    将最外面的布局元素 .container 修改为 .container-fluid，就可以将固定宽度的栅格布局转换为 100% 宽度的布局。-->
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true" th:text="${sectionName}"></span></h2>
             <hr>
             <div class="media" th:each="question: ${pagination.questions}">
                 <div class="media-left">
@@ -30,16 +30,22 @@
                     <h4 class="media-heading" th:text="${question.title}"></h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="comment" id="comment">
-                        <span th:text="${question.commentCount}"></span><span>个回复</span>
-                        <span th:text="${question.viewCount}"></span><span>次浏览·</span>
-                        <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
-                    </span>
+                                    <span th:text="${question.commentCount}"></span><span>个回复</span>
+                                    <span th:text="${question.viewCount}"></span><span>次浏览·</span>
+                                    <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
+                                </span>
                 </div>
             </div>
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热点话题</h3>
+            <div class="list-group" style="margin-top: 15px">
+                <a href="/profile/problems"
+                   th:class="${section == 'questions'}? 'active list-group-item':'list-group-item'">我的问题</a>
+                <a href="/profile/replies"
+                   th:class="${section == 'replies'}? 'active list-group-item':'list-group-item'"><span
+                        class="badge">14</span>最新回复</a>
+            </div>
         </div>
     </div>
 
@@ -47,23 +53,23 @@
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li>
-                <a th:href="@{/(page=1)}" aria-label="Previous" th:if="${pagination.isShowFirstPage()}">
+                <a th:href="@{/profile/questions/(page=1)}" aria-label="Previous" th:if="${pagination.isShowFirstPage()}">
                     <span aria-hidden="true">&lt;&lt;</span>
                 </a>
-                <a th:href="@{/(page=${pagination.currentPage}-1)}" aria-label="Previous"
+                <a th:href="@{/profile/questions/(page=${pagination.currentPage}-1)}" aria-label="Previous"
                    th:if="${pagination.isShowPrevious()}">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
             <li th:each="page:${pagination.pages}" th:class="${pagination.currentPage == page}?'active':''">
-                <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                <a th:href="@{/profile/questions/(page=${page})}" th:text="${page}"></a>
             </li>
             <li>
-                <a th:href="@{/(page=${pagination.currentPage}+1)}" aria-label="Next"
+                <a th:href="@{/profile/questions/(page=${pagination.currentPage}+1)}" aria-label="Next"
                    th:if="${pagination.isShowNext()}">
                     <span aria-hidden="true">&gt;</span>
                 </a>
-                <a th:href="@{/(page=${pagination.totolNumber})}" aria-label="Next"
+                <a th:href="@{/profile/questions/(page=${pagination.totolNumber})}" aria-label="Next"
                    th:if="${pagination.isShowLastPage()}">
                     <span aria-hidden="true">&gt;&gt;</span>
                 </a>

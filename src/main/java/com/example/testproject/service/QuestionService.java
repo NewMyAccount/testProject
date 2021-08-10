@@ -29,20 +29,16 @@ public class QuestionService {
     @Autowired
     private PageProvider pageProvider;
 
-    private Integer page;
-
     public PaginationDTO list(Integer page, Integer size) {
         //查找总页数
         Integer totolNumber = questionMapper.findTotolNumber();
         if (page < 1) {
-            this.page = 1;
+            page = 1;
         } else if (page > totolNumber) {
-            this.page = totolNumber;
-        } else {
-            this.page = page;
+            page = totolNumber;
         }
         //偏移量，从第几个数据开始找
-        Integer offset = size * (this.page - 1);
+        Integer offset = size * (page - 1);
         List<Question> questionList = questionMapper.select(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
@@ -52,7 +48,29 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        PaginationDTO paginationDTO = pageProvider.pageHelper(questionDTOList, this.page, size, totolNumber);
+        PaginationDTO paginationDTO = pageProvider.pageHelper(questionDTOList, page, size, totolNumber);
+        return paginationDTO;
+    }
+
+    public PaginationDTO List(User user, Integer page, Integer size) {
+        //查找总页数
+        Integer totolNumber = questionMapper.findTotolNumber();
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        if (page < 1) {
+            page = 1;
+        } else if (page > totolNumber) {
+            page = totolNumber;
+        }
+        //偏移量，从第几个数据开始找
+        Integer offset = size * (page - 1);
+        List<Question> questionList = questionMapper.selectById(user.getAccountId(), offset, size);
+        for (Question question : questionList) {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTOList.add(questionDTO);
+            questionDTO.setUser(user);
+        }
+        PaginationDTO paginationDTO = pageProvider.pageHelper(questionDTOList, page, size, totolNumber);
         return paginationDTO;
     }
 }

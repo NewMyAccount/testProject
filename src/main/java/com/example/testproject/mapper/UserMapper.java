@@ -17,8 +17,8 @@ public interface UserMapper {
     void insert(User user);
 
     @Select("select * from user where token = #{token}")
-    User findByToken(@Param("token") String token);
+    User findByToken(@Param(value = "token") String token);
 
     @Select("select * from user where account_id = #{accountId}")
-    User findById(@Param("accountId") Integer accountId);
+    User findById(@Param(value = "accountId") Integer accountId);
 }
