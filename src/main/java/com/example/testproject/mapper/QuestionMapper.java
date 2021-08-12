@@ -25,6 +25,9 @@ public interface QuestionMapper {
     @Select("select count(1) from question")
     Integer findTotolNumber();
 
+    @Select("select count(1) from question where creator = #{accountId}")
+    Integer findTotalNumberById(String accountId);
+
     @Select("select * from question where creator = #{accountId} limit #{offset}, #{size}")
     List<Question> selectById(String accountId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 }

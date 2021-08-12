@@ -1,7 +1,6 @@
 package com.example.testproject.controller;
 
 import com.example.testproject.dto.AccessTokenDTO;
-import com.example.testproject.dto.BaiduTokenDTO;
 import com.example.testproject.dto.BaiduUser;
 import com.example.testproject.dto.GithubUser;
 import com.example.testproject.mapper.UserMapper;
@@ -115,6 +114,6 @@ public class AuthorizeController {
         }
         System.out.println("accessToken:" + accessToken);
         System.out.println("baiduUser:" + baiduUser);
-        return "/";
+        return "redirect:/";
     }
 }

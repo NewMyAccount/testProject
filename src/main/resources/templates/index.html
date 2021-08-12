@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <title>张昕的前端页面</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -23,7 +23,7 @@
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded avatar"
-                             th:src="${question.user} != null ? ${question.user.avatarUrl} : '' ">
+                             th:src="${question.user} != null ? ${question.user.avatarUrl} : '' " alt="">
                     </a>
                 </div>
                 <div class="media-body">

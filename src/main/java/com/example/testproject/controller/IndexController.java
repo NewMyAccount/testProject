@@ -1,7 +1,6 @@
 package com.example.testproject.controller;
 
 import com.example.testproject.dto.PaginationDTO;
-import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.User;
 import com.example.testproject.service.QuestionService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @Author: 张昕
@@ -55,7 +53,6 @@ public class IndexController {
     @GetMapping("/hello")
     public String hello(@RequestParam(name = "name") String name, Model model) {
         model.addAttribute("name", name);
-        return "hello";
+        return "";
     }
-
 }

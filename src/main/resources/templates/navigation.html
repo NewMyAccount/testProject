@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 
 <body>
 <div th:fragment="navigation">
@@ -18,7 +18,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="搜索问题">
+                        <label>
+                            <input type="text" class="form-control" placeholder="搜索问题">
+                        </label>
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
@@ -37,10 +39,10 @@
                                     </div>
                                     <div class="modal-body" style="text-align:center">
                                         <a href="https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
-                                            <img src="https://www.mawen.co/images/github.png">
+                                            <img src="https://www.mawen.co/images/github.png" alt="">
                                         </a>
                                         <a href="http://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=SmzQr4CAxTazikFlwnfCGvmzFLSzlIXL&redirect_uri=http://localhost:8887/baiducallback&scope=basic,netdisk&display=page&qrcode=1">
-                                            <img src="/images/baidu.jpg" height="50px" width="50px">
+                                            <img src="/images/baidu.jpg" height="50px" width="50px" alt="">
                                         </a>
                                     </div>
                                     <div class="modal-footer">

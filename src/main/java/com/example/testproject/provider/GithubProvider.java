@@ -7,6 +7,7 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @Author: 张昕
@@ -17,7 +18,7 @@ import java.io.IOException;
 @Component
 public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
-        MediaType mediaType=MediaType.get("application/json;charset=utf-8");
+        MediaType mediaType = MediaType.get("application/json;charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
         Request request = new Request.Builder()
@@ -25,12 +26,11 @@ public class GithubProvider {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            if (response.code() == 404){
+            if (response.code() == 404) {
                 return null;
             }
-            String string = response.body().string();
-            String token = string.split("&")[0].split("=")[1];
-            return token;
+            //先用‘&’分割字符串，获取字符串数据第0个即为token=XX ，再用‘=’分割。
+            return Objects.requireNonNull(response.body()).string().split("&")[0].split("=")[1];
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,8 +48,7 @@ public class GithubProvider {
 //                .build();
         try {
             Response response = client.newCall(request).execute();
-            GithubUser githubUser = JSON.parseObject(response.body().string(), GithubUser.class);
-            return githubUser;
+            return JSON.parseObject(Objects.requireNonNull(response.body()).string(), GithubUser.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -20,23 +20,16 @@ public class PageProvider {
     @Autowired
     QuestionMapper questionMapper;
 
-    public PaginationDTO pageHelper(List<QuestionDTO> questionDTOList, Integer page, Integer size, Integer totolNumber) {
+    public PaginationDTO pageHelper(List<QuestionDTO> questionDTOList, Integer page, Integer pageNumber) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOList);
+
         List<Integer> pageList = new ArrayList<>();
-        //总页数
-        Integer totalPageNumber;
-        if (totolNumber % size == 0) {
-            totalPageNumber = totolNumber / size;
-        } else {
-            totalPageNumber = totolNumber / size + 1;
-        }
         pageList.add(page);
-        for(int i = 1; i <= 3; i++){
-            if(page - i > 0){
+        for (int i = 1; i <= 3; i++) {
+            if (page - i > 0) {
                 pageList.add(0, page - i);
             }
-            if(page + i <= totalPageNumber){
+            if (page + i <= pageNumber) {
                 pageList.add(page + i);
             }
         }
@@ -47,7 +40,7 @@ public class PageProvider {
             paginationDTO.setShowPrevious(true);
         }
         //是否展示下一页
-        if (page == totalPageNumber) {
+        if (page == pageNumber) {
             paginationDTO.setShowNext(false);
         } else {
             paginationDTO.setShowNext(true);
@@ -59,12 +52,13 @@ public class PageProvider {
             paginationDTO.setShowFirstPage(false);
         }
         //是否展示末页
-        if (!pageList.contains(totalPageNumber)) {
+        if (!pageList.contains(pageNumber)) {
             paginationDTO.setShowLastPage(true);
         } else {
             paginationDTO.setShowLastPage(false);
         }
-        paginationDTO.setTotolNumber(totalPageNumber);
+        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setTotolNumber(pageNumber);
         paginationDTO.setPages(pageList);
         paginationDTO.setCurrentPage(page);
         return paginationDTO;

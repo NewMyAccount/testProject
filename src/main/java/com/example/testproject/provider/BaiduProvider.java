@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.example.testproject.dto.AccessTokenDTO;
 import com.example.testproject.dto.BaiduTokenDTO;
 import com.example.testproject.dto.BaiduUser;
-import com.example.testproject.dto.GithubUser;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @Author: 张昕
@@ -28,10 +30,11 @@ public class BaiduProvider {
             if (response.code() == 404) {
                 return null;
             }
-            String string = response.body().string();
+            String string = Objects.requireNonNull(response.body()).string();
             BaiduTokenDTO baiduTokenDTO = JSON.parseObject(string, BaiduTokenDTO.class);
             System.out.println(string);
             return baiduTokenDTO.getAccessToken();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,9 +47,8 @@ public class BaiduProvider {
                 .url("https://pan.baidu.com/rest/2.0/xpan/nas?method=uinfo&access_token=" + baiduTokenDTO)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            String string = response.body().string();
-            BaiduUser baiduUser = JSON.parseObject(string, BaiduUser.class);
-            return baiduUser;
+            String string = Objects.requireNonNull(response.body()).string();
+            return JSON.parseObject(string, BaiduUser.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

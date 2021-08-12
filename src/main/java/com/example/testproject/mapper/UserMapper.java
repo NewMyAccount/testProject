@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * @Author: 张昕
  * @Date： 2021/7/26
@@ -20,5 +22,5 @@ public interface UserMapper {
     User findByToken(@Param(value = "token") String token);
 
     @Select("select * from user where account_id = #{accountId}")
-    User findById(@Param(value = "accountId") Integer accountId);
+    List<User> findById(@Param(value = "accountId") Integer accountId);
 }
