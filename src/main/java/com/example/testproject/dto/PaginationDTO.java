@@ -19,5 +19,5 @@ public class PaginationDTO {
     private boolean showFirstPage;
     private boolean showNext;
     private boolean showLastPage;
-    private Integer totolNumber;
+    private Integer totalNumber;
 }

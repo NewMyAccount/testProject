@@ -34,31 +34,15 @@ public class PageProvider {
             }
         }
         //是否展示上一页
-        if (page == 1) {
-            paginationDTO.setShowPrevious(false);
-        } else {
-            paginationDTO.setShowPrevious(true);
-        }
+        paginationDTO.setShowPrevious(page != 1);
         //是否展示下一页
-        if (page == pageNumber) {
-            paginationDTO.setShowNext(false);
-        } else {
-            paginationDTO.setShowNext(true);
-        }
+        paginationDTO.setShowNext(!page.equals(pageNumber));
         //是否展示首页
-        if (!pageList.contains(1)) {
-            paginationDTO.setShowFirstPage(true);
-        } else {
-            paginationDTO.setShowFirstPage(false);
-        }
+        paginationDTO.setShowFirstPage(!pageList.contains(1));
         //是否展示末页
-        if (!pageList.contains(pageNumber)) {
-            paginationDTO.setShowLastPage(true);
-        } else {
-            paginationDTO.setShowLastPage(false);
-        }
+        paginationDTO.setShowLastPage(!pageList.contains(pageNumber));
         paginationDTO.setQuestions(questionDTOList);
-        paginationDTO.setTotolNumber(pageNumber);
+        paginationDTO.setTotalNumber(pageNumber);
         paginationDTO.setPages(pageList);
         paginationDTO.setCurrentPage(page);
         return paginationDTO;

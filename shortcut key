@@ -21,3 +21,4 @@ Ctrl+Alt+left/right，返回至上次浏览的位置
 ctrl + shift + f4 关闭所有文件
 alt + enter 导入包
 alt+ insert 生成generate方法
+Shift+F1 快速定位到错误代码行

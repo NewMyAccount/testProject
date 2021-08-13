@@ -27,6 +27,7 @@ public class GithubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             if (response.code() == 404) {
+                System.out.println(response.body());
                 return null;
             }
             //先用‘&’分割字符串，获取字符串数据第0个即为token=XX ，再用‘=’分割。

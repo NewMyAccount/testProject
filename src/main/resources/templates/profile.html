@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
-    <title>${sectionName}</title>
+    <title th:text="${sectionName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="/js/jquery-3.3.1.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
@@ -30,10 +30,10 @@
                     <h4 class="media-heading" th:text="${question.title}"></h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="comment" id="comment">
-                                    <span th:text="${question.commentCount}"></span><span>个回复</span>
-                                    <span th:text="${question.viewCount}"></span><span>次浏览·</span>
-                                    <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
-                                </span>
+                        <span th:text="${question.commentCount}"></span><span>个回复</span>
+                        <span th:text="${question.viewCount}"></span><span>次浏览·</span>
+                        <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
+                    </span>
                 </div>
             </div>
 
@@ -49,28 +49,34 @@
         </div>
     </div>
 
+    <!--th:href="@{'/profile' + ${questions}(page = ${1}})}"-->
+    <!--th:href="@{/profile/{questions}/(page=1, questions=${section})}"-->
+    <!-- thymeleaf href的两种拼接方式-->
     <div class="col-lg-6 col-md-0 col-sm-0 col-xs-0"></div>
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li>
-                <a th:href="@{/profile/questions/(page=1)}" aria-label="Previous"
+                <a th:href="@{/profile/{questions}/(page=1, questions=${section})}" aria-label="Previous"
                    th:if="${pagination.isShowFirstPage()}">
                     <span aria-hidden="true">&lt;&lt;</span>
                 </a>
-                <a th:href="@{/profile/questions/(page=${pagination.currentPage}-1)}" aria-label="Previous"
+                <a th:href="@{/profile/{questions}/(page=${pagination.currentPage}-1,questions=${section})}"
+                   aria-label="Previous"
                    th:if="${pagination.isShowPrevious()}">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
             <li th:each="page:${pagination.pages}" th:class="${pagination.currentPage == page}?'active':''">
-                <a th:href="@{/profile/questions/(page=${page})}" th:text="${page}"></a>
+                <a th:href="@{/profile/{questions}/(page=${page}, questions=${section})}" th:text="${page}"></a>
             </li>
             <li>
-                <a th:href="@{/profile/questions/(page=${pagination.currentPage}+1)}" aria-label="Next"
+                <a th:href="@{/profile/{questions}/(page=${pagination.currentPage}+1, questions=${section})}"
+                   aria-label="Next"
                    th:if="${pagination.isShowNext()}">
                     <span aria-hidden="true">&gt;</span>
                 </a>
-                <a th:href="@{/profile/questions/(page=${pagination.totolNumber})}" aria-label="Next"
+                <a th:href="@{/profile/{questions}/(page=${pagination.totalNumber}, questions=${section})}"
+                   aria-label="Next"
                    th:if="${pagination.isShowLastPage()}">
                     <span aria-hidden="true">&gt;&gt;</span>
                 </a>

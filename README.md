@@ -16,7 +16,9 @@
 
 [OAuth App认证](https://docs.github.com/en/developers/apps/building-oauth-apps)
 
-[spring 文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
+[spring boot 文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
+
+[spring mvc](https://docs.spring.io/spring-framework/docs/5.0.3.RELEASE/spring-framework-reference/web.html#mvc-servlet)
 
 [Mybatis SpringBoot](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 
