@@ -32,8 +32,8 @@ public class QuestionService {
 
     public PaginationDTO list(Integer page, Integer size) {
         //查找问题总个数
-        Integer totolNumber = questionMapper.findTotolNumber();
-        Map<String, Integer> map = countPageNumber(page, size, totolNumber);
+        Integer totalNumber = questionMapper.findTotolNumber();
+        Map<String, Integer> map = countPageNumber(page, size, totalNumber);
         //偏移量，从第几个数据开始找
         Integer offset = size * (map.get("currentPage") - 1);
         List<Question> questionList = questionMapper.select(offset, size);
@@ -50,9 +50,8 @@ public class QuestionService {
 
     public PaginationDTO List(User user, Integer page, Integer size) {
         //查找问题总个数
-        Integer totolNumber = questionMapper.findTotalNumberById(user.getAccountId());
-
-        Map<String, Integer> map = countPageNumber(page, size, totolNumber);
+        Integer totalNumber = questionMapper.findTotalNumberById(user.getAccountId());
+        Map<String, Integer> map = countPageNumber(page, size, totalNumber);
         //偏移量，从第几个数据开始找
         Integer offset = size * (map.get("currentPage") - 1);
         List<Question> questionList = questionMapper.selectById(user.getAccountId(), offset, size);
@@ -66,25 +65,34 @@ public class QuestionService {
         return pageProvider.pageHelper(questionDTOList, map.get("currentPage"), map.get("totalPageNumber"));
     }
 
-    private Map<String, Integer> countPageNumber(Integer page, Integer size, Integer totolNumber) {
+    private Map<String, Integer> countPageNumber(Integer page, Integer size, Integer totalNumber) {
         if (page < 1) {
             page = 1;
-        } else if (totolNumber != 0 && page > totolNumber) {
-            page = totolNumber;
-        } else if (totolNumber == 0) {
+        } else if (totalNumber != 0 && page > totalNumber) {
+            page = totalNumber;
+        } else if (totalNumber == 0) {
             page = 1;
         }
         //总页数
         int totalPageNumber;
-        if (totolNumber % size == 0) {
-            totalPageNumber = totolNumber / size;
+        if (totalNumber % size == 0) {
+            totalPageNumber = totalNumber / size;
         } else {
-            totalPageNumber = totolNumber / size + 1;
+            totalPageNumber = totalNumber / size + 1;
         }
         Map<String, Integer> map = new HashMap<>();
         map.put("currentPage", page);
         //个数为0的情况下页数计算结果也为0，页数为0的情况下返回1。
         map.put("totalPageNumber", totalPageNumber != 0 ? totalPageNumber : 1);
         return map;
+    }
+
+    public QuestionDTO findById(Integer id) {
+        Question question = questionMapper.findById(id);
+        User user = userMapper.findById(question.getCreator()).get(0);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }

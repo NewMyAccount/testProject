@@ -21,7 +21,7 @@
             <hr>
             <div class="media" th:each="question: ${pagination.questions}">
                 <div class="media-left">
-                    <a href="#">
+                    <a th:href="@{'/questionDetail/' + ${question.id}}">
                         <img class="img-rounded avatar"
                              th:src="${question.user} != null ? ${question.user.avatarUrl} : '' " alt="">
                     </a>

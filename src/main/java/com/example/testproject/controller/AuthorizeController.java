@@ -38,7 +38,7 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
     @Value("${github.redirect.uri}")
-    private String rediretUri;
+    private String redirectUri;
 
     @Autowired
     private BaiduProvider baiduProvider;
@@ -58,7 +58,7 @@ public class AuthorizeController {
         accessTokenDTO.setClientId(clientId);
         accessTokenDTO.setClientSecret(clientSecret);
         accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirectUri(rediretUri);
+        accessTokenDTO.setRedirectUri(redirectUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         if (accessToken == null) {
             return "redirect:/";
@@ -87,7 +87,7 @@ public class AuthorizeController {
 
     //http://developer.baidu.com/console#app/project(百度授权回调地址)
     @GetMapping("/baiducallback")
-    public String baiducallback(@RequestParam(name = "code") String code, HttpServletResponse response) {
+    public String baiduCallback(@RequestParam(name = "code") String code, HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClientId(baiduAppKey);
         accessTokenDTO.setClientSecret(baiduSecretKey);
