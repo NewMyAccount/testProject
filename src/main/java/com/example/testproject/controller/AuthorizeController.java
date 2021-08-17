@@ -3,10 +3,10 @@ package com.example.testproject.controller;
 import com.example.testproject.dto.AccessTokenDTO;
 import com.example.testproject.dto.BaiduUser;
 import com.example.testproject.dto.GithubUser;
-import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.User;
 import com.example.testproject.provider.BaiduProvider;
 import com.example.testproject.provider.GithubProvider;
+import com.example.testproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -50,7 +50,7 @@ public class AuthorizeController {
     private String baiduRedirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code, HttpServletResponse response) {
@@ -72,10 +72,8 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             //把session写到数据库中
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //给前端页面返回token
             response.addCookie(new Cookie("token", token));
             //request.getSession().setAttribute("githubUser", githubUser);
@@ -106,7 +104,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             //把session写到数据库中
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //给前端页面返回token
             response.addCookie(new Cookie("token", token));
             //setAttribute()方法默认会写一个cookie

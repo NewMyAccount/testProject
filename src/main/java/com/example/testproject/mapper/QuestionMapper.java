@@ -23,13 +23,13 @@ public interface QuestionMapper {
     List<Question> select(@Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
     @Select("select count(1) from question")
-    Integer findTotolNumber();
+    Integer findTotalNumber();
 
-    @Select("select count(1) from question where creator = #{accountId}")
-    Integer findTotalNumberById(String accountId);
+    @Select("select count(1) from question where creator = #{id}")
+    Integer findTotalNumberById(Integer id);
 
-    @Select("select * from question where creator = #{accountId} limit #{offset}, #{size}")
-    List<Question> selectById(String accountId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
+    @Select("select * from question where creator = #{id} limit #{offset}, #{size}")
+    List<Question> selectById(Integer id, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
     @Select("select * from question where id = #{id}")
     Question findById(@Param("id") Integer id);

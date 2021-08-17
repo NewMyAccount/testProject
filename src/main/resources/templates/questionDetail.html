@@ -20,7 +20,7 @@
             </h4>
             <span class="comment" id="comment">
                 <span>作者：</span><span th:text="${questionDetail.user.name}"></span><span> | </span>
-                <span>发布时间：</span><span th:text="${#dates.format(questionDetail.gmtModified, 'dd MMMM yyyy')}"></span><span> | </span>
+                <span>发布时间：</span><span th:text="${#dates.format(questionDetail.gmtModified, 'yyyy-MM-dd HH:mm')}"></span><span> | </span>
                 <span>阅读数：</span><span th:text="${questionDetail.viewCount}"></span>
             </span>
             <hr>
@@ -28,7 +28,7 @@
             <hr>
             <p th:text="${questionDetail.tag}"></p>
             <hr>
-            <a th:href="@{/questionDetail/{id}(id=${questionDetail.getId()})}">
+            <a th:href="@{/questionDetail/{id}(id=${questionDetail.getId()})}" th:if="${session.user} != null && ${session.user.accountId} == ${questionDetail.user.accountId}">
                 <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color: #999999;font-size: 13px">编辑问题</span>
             </a>
         </div>

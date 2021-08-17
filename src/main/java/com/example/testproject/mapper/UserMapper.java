@@ -1,12 +1,7 @@
 package com.example.testproject.mapper;
 
 import com.example.testproject.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @Author: 张昕
@@ -21,6 +16,12 @@ public interface UserMapper {
     @Select("select * from user where token = #{token}")
     User findByToken(@Param(value = "token") String token);
 
+    @Select("select * from user where id = #{id}")
+    User findById(Integer id);
+
+    @Update("update user set name = #{name}, token = #{token}, gmt_modified = #{gmtModified}, avatar_url = #{avatarUrl} where id = #{id}")
+    void updateUser(User user);
+
     @Select("select * from user where account_id = #{accountId}")
-    List<User> findById(@Param(value = "accountId") Integer accountId);
+    User findByAccountId(String accountId);
 }

@@ -36,7 +36,7 @@ public class ProfileController {
             return "redirect:/";
         }
         if ("questions".equals(action)) {
-            PaginationDTO paginationDTO = questionService.List(user, page, size);
+            PaginationDTO paginationDTO = questionService.list(user, page, size);
             model.addAttribute("pagination", paginationDTO);
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");

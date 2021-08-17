@@ -33,7 +33,7 @@
                         <span th:text="${question.commentCount}"></span><span>个回复</span>
                         <span th:text="${question.viewCount}"></span><span>次浏览·</span>
 
-                        <span th:text="${#dates.format(question.gmtModified, 'dd MMMM yyyy')}"></span>
+                        <span th:text="${#dates.format(question.gmtModified, 'yyyy-MM-dd HH:mm')}"></span>
                     </span>
                 </div>
             </div>
