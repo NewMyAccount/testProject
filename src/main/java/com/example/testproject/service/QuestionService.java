@@ -2,19 +2,24 @@ package com.example.testproject.service;
 
 import com.example.testproject.dto.PaginationDTO;
 import com.example.testproject.dto.QuestionDTO;
+import com.example.testproject.mapper.QuestionDynamicSqlSupport;
 import com.example.testproject.mapper.QuestionMapper;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import com.example.testproject.provider.PageProvider;
+import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.example.testproject.mapper.QuestionDynamicSqlSupport.question;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 /**
  * @Author: 张昕
@@ -32,17 +37,23 @@ public class QuestionService {
 
     public PaginationDTO list(Integer page, Integer size) {
         //查找问题总个数
-        Integer totalNumber = questionMapper.findTotalNumber();
-        Map<String, Integer> map = countPageNumber(page, size, totalNumber);
+        SelectStatementProvider selectStatementProvider = select(count())
+                .from(question).build().render(RenderingStrategies.MYBATIS3);
+        long totalNumber = questionMapper.count(selectStatementProvider);
+        //页数少的情况下可以这么用
+        Map<String, Integer> map = countPageNumber(page, size, (int) totalNumber);
         //偏移量，从第几个数据开始找
-        Integer offset = size * (map.get("currentPage") - 1);
-        List<Question> questionList = questionMapper.select(offset, size);
+        int offset = size * (map.get("currentPage") - 1);
+        SelectStatementProvider selectNum = select(question.allColumns())
+                .from(question).limit(size).offset(offset)
+                .build().render(RenderingStrategies.MYBATIS3);
+        List<Question> questionList = questionMapper.selectMany(selectNum);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
-            User user = userMapper.findById(question.getCreator());
-            questionDTO.setUser(user);
+            Optional<User> user = userMapper.selectByPrimaryKey(question.getCreator());
+            questionDTO.setUser(user.orElse(null));
             questionDTOList.add(questionDTO);
         }
         return pageProvider.pageHelper(questionDTOList, map.get("currentPage"), map.get("totalPageNumber"));
@@ -50,11 +61,21 @@ public class QuestionService {
 
     public PaginationDTO list(User user, Integer page, Integer size) {
         //查找问题总个数
-        Integer totalNumber = questionMapper.findTotalNumberById(user.getId());
-        Map<String, Integer> map = countPageNumber(page, size, totalNumber);
+        SelectStatementProvider findTotalNumberById = select(count())
+                .from(question)
+                .where(question.creator, isEqualTo(user.getId()))
+                .build().render(RenderingStrategies.MYBATIS3);
+        long totalNumber = questionMapper.count(findTotalNumberById);
+        Map<String, Integer> map = countPageNumber(page, size, (int) totalNumber);
         //偏移量，从第几个数据开始找
-        Integer offset = size * (map.get("currentPage") - 1);
-        List<Question> questionList = questionMapper.selectById(user.getId(), offset, size);
+        int offset = size * (map.get("currentPage") - 1);
+        SelectStatementProvider selectById = select(question.allColumns())
+                .from(question)
+                .where(question.creator, isEqualTo(user.getId()))
+                .limit(size)
+                .offset(offset)
+                .build().render(RenderingStrategies.MYBATIS3);
+        List<Question> questionList = questionMapper.selectMany(selectById);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
             QuestionDTO questionDTO = new QuestionDTO();
@@ -88,11 +109,13 @@ public class QuestionService {
     }
 
     public QuestionDTO findById(Integer id) {
-        Question question = questionMapper.findById(id);
-        User user = userMapper.findById(question.getCreator());
+        Optional<Question> question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
-        BeanUtils.copyProperties(question, questionDTO);
-        questionDTO.setUser(user);
+        if(question.isPresent()){
+            Optional<User> user = userMapper.selectByPrimaryKey(question.get().getCreator());
+            BeanUtils.copyProperties(question.get(), questionDTO);
+            questionDTO.setUser(user.orElse(null));
+        }
         return questionDTO;
     }
 
@@ -100,10 +123,27 @@ public class QuestionService {
         if (question.getId() == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            InsertStatementProvider<Question> insertStatement = insert(question).into(QuestionDynamicSqlSupport.question)
+                    .map(QuestionDynamicSqlSupport.creator).toProperty("creator")
+                    .map(QuestionDynamicSqlSupport.title).toProperty("title")
+                    .map(QuestionDynamicSqlSupport.description).toProperty("description")
+                    .map(QuestionDynamicSqlSupport.tag).toProperty("tag")
+                    .map(QuestionDynamicSqlSupport.gmtCreate).toProperty("gmtCreate")
+                    .map(QuestionDynamicSqlSupport.gmtModified).toProperty("gmtModified")
+                    .build().render(RenderingStrategies.MYBATIS3);
+            questionMapper.insert(insertStatement);
         } else {
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            UpdateStatementProvider update = update(QuestionDynamicSqlSupport.question)
+                    .set(QuestionDynamicSqlSupport.creator).equalTo(question.getCreator())
+                    .set(QuestionDynamicSqlSupport.title).equalTo(question.getTitle())
+                    .set(QuestionDynamicSqlSupport.description).equalTo(question.getDescription())
+                    .set(QuestionDynamicSqlSupport.tag).equalTo(question.getTag())
+                    .set(QuestionDynamicSqlSupport.gmtModified).equalTo(question.getGmtModified())
+                    .where(QuestionDynamicSqlSupport.creator, isEqualTo(question.getCreator()))
+                    .and(QuestionDynamicSqlSupport.id, isEqualTo(question.getId()))
+                    .build().render(RenderingStrategies.MYBATIS3);
+            questionMapper.update(update);
         }
     }
 }

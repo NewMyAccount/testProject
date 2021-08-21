@@ -26,10 +26,6 @@ public class GithubProvider {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            if (response.code() == 404) {
-                System.out.println(response.body());
-                return null;
-            }
             //先用‘&’分割字符串，获取字符串数据第0个即为token=XX ，再用‘=’分割。
             return Objects.requireNonNull(response.body()).string().split("&")[0].split("=")[1];
         } catch (IOException e) {
@@ -42,14 +38,16 @@ public class GithubProvider {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user")
-                .header("Authorization", "token" + accessToken)
+                .header("Authorization", "token " + accessToken)
                 .build();
 //        Request request = new Request.Builder()
 //                .url("https://api.github.com/user?access_token=" + accessToken)
 //                .build();
         try {
             Response response = client.newCall(request).execute();
-            return JSON.parseObject(Objects.requireNonNull(response.body()).string(), GithubUser.class);
+            String string = Objects.requireNonNull(response.body()).string();
+            System.out.println(string);
+            return JSON.parseObject(string, GithubUser.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

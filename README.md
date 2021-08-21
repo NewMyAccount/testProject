@@ -22,6 +22,10 @@
 
 [Mybatis SpringBoot](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 
+[Mybatis generator](http://mybatis.org/generator/)
+
+[Mybatis dymamic SQL](https://mybatis.org/mybatis-dynamic-sql/)
+
 [okhttp：一个处理网络请求的开源项目](https://square.github.io/okhttp/) 
 
 [thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
@@ -60,4 +64,10 @@
     GMT_CREATE   BIGINT,
     GMT_MODIFIED BIGINT,
 );
+```
+
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+
 ```

@@ -60,6 +60,7 @@ public class AuthorizeController {
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirectUri(redirectUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        System.out.println(accessToken);
         if (accessToken == null) {
             return "redirect:/";
         }
@@ -72,6 +73,7 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
+            user.setBio(githubUser.getBio());
             //把session写到数据库中
             userService.createOrUpdate(user);
             //给前端页面返回token
@@ -101,8 +103,6 @@ public class AuthorizeController {
             user.setName(baiduUser.getBaiduName());
             user.setAccountId(String.valueOf(baiduUser.getUk()));
             user.setAvatarUrl(baiduUser.getAvatarUrl());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             //把session写到数据库中
             userService.createOrUpdate(user);
             //给前端页面返回token

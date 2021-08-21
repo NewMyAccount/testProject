@@ -1,7 +1,6 @@
 package com.example.testproject.controller;
 
 import com.example.testproject.dto.QuestionDTO;
-import com.example.testproject.mapper.QuestionMapper;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import com.example.testproject.service.QuestionService;
@@ -25,12 +24,13 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping("publish/{id}")
+    @GetMapping("/publish/{id}")
     public String editQuestion(@PathVariable(name = "id") Integer id, Model model){
         QuestionDTO question = questionService.findById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
         return "publish";
     }
 
