@@ -10,6 +10,7 @@ ctrl + H 全局搜索
 显示类的继承关系，并打开类继承视图 F4
 alt + ↑ ↓ 移动一行
 ctrl+l 定位到当前编辑器的某一行
+ctrl + G 查询方法调用
 open call hierarchy查询方法调用 ctrl + alt + H
 重构-重命名：Alt+Shift+R
 alt + shift + ↑ ↓ 快速选中单词（可以扩大缩小选中）

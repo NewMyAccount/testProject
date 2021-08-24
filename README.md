@@ -24,7 +24,7 @@
 
 [Mybatis generator](http://mybatis.org/generator/)
 
-[Mybatis dymamic SQL](https://mybatis.org/mybatis-dynamic-sql/)
+[Mybatis dynamic SQL](https://mybatis.org/mybatis-dynamic-sql/)
 
 [okhttp：一个处理网络请求的开源项目](https://square.github.io/okhttp/) 
 
@@ -50,6 +50,7 @@
 
 [lombok](https://projectlombok.org/)
 
+[postman插件已下载]
 ##tomcat、 spring、 spring mvc、 servlet、jvm 关系和联系 
 
 ##脚本
@@ -68,6 +69,6 @@
 
 ```bash
 mvn flyway:migrate
-mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+mvn -D mybatis.generator.overwrite=true mybatis-generator:generate
 
 ```

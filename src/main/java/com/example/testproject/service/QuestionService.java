@@ -2,6 +2,8 @@ package com.example.testproject.service;
 
 import com.example.testproject.dto.PaginationDTO;
 import com.example.testproject.dto.QuestionDTO;
+import com.example.testproject.exception.CustomErrorCode;
+import com.example.testproject.exception.CustomException;
 import com.example.testproject.mapper.QuestionDynamicSqlSupport;
 import com.example.testproject.mapper.QuestionMapper;
 import com.example.testproject.mapper.UserMapper;
@@ -109,15 +111,28 @@ public class QuestionService {
     }
 
     public QuestionDTO findById(Integer id) {
+
         Optional<Question> question = questionMapper.selectByPrimaryKey(id);
-        QuestionDTO questionDTO = new QuestionDTO();
-        if(question.isPresent()){
-            Optional<User> user = userMapper.selectByPrimaryKey(question.get().getCreator());
-            BeanUtils.copyProperties(question.get(), questionDTO);
-            questionDTO.setUser(user.orElse(null));
+        if (!question.isPresent()) {
+            throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
         }
+        //增加阅读数量
+        UpdateStatementProvider updateStatementProvider = update(QuestionDynamicSqlSupport.question)
+                .set(QuestionDynamicSqlSupport.viewCount)
+                .equalTo(add(QuestionDynamicSqlSupport.viewCount, constant("0"), constant("1")))
+                .where(QuestionDynamicSqlSupport.id, isEqualTo(id))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        questionMapper.update(updateStatementProvider);
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        Optional<User> user = userMapper.selectByPrimaryKey(question.get().getCreator());
+        BeanUtils.copyProperties(question.get(), questionDTO);
+        questionDTO.setUser(user.orElse(null));
+
         return questionDTO;
     }
+
 
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
@@ -143,7 +158,10 @@ public class QuestionService {
                     .where(QuestionDynamicSqlSupport.creator, isEqualTo(question.getCreator()))
                     .and(QuestionDynamicSqlSupport.id, isEqualTo(question.getId()))
                     .build().render(RenderingStrategies.MYBATIS3);
-            questionMapper.update(update);
+            int number = questionMapper.update(update);
+            if (number != 1) {
+                throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
