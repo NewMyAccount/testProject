@@ -10,7 +10,6 @@ import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import com.example.testproject.provider.PageProvider;
-import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
@@ -129,7 +128,6 @@ public class QuestionService {
         Optional<User> user = userMapper.selectByPrimaryKey(question.get().getCreator());
         BeanUtils.copyProperties(question.get(), questionDTO);
         questionDTO.setUser(user.orElse(null));
-
         return questionDTO;
     }
 
@@ -138,27 +136,19 @@ public class QuestionService {
         if (question.getId() == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            InsertStatementProvider<Question> insertStatement = insert(question).into(QuestionDynamicSqlSupport.question)
-                    .map(QuestionDynamicSqlSupport.creator).toProperty("creator")
-                    .map(QuestionDynamicSqlSupport.title).toProperty("title")
-                    .map(QuestionDynamicSqlSupport.description).toProperty("description")
-                    .map(QuestionDynamicSqlSupport.tag).toProperty("tag")
-                    .map(QuestionDynamicSqlSupport.gmtCreate).toProperty("gmtCreate")
-                    .map(QuestionDynamicSqlSupport.gmtModified).toProperty("gmtModified")
-                    .build().render(RenderingStrategies.MYBATIS3);
-            questionMapper.insert(insertStatement);
+            questionMapper.insertSelective(question);
         } else {
             question.setGmtModified(System.currentTimeMillis());
-            UpdateStatementProvider update = update(QuestionDynamicSqlSupport.question)
-                    .set(QuestionDynamicSqlSupport.creator).equalTo(question.getCreator())
-                    .set(QuestionDynamicSqlSupport.title).equalTo(question.getTitle())
-                    .set(QuestionDynamicSqlSupport.description).equalTo(question.getDescription())
-                    .set(QuestionDynamicSqlSupport.tag).equalTo(question.getTag())
-                    .set(QuestionDynamicSqlSupport.gmtModified).equalTo(question.getGmtModified())
-                    .where(QuestionDynamicSqlSupport.creator, isEqualTo(question.getCreator()))
-                    .and(QuestionDynamicSqlSupport.id, isEqualTo(question.getId()))
-                    .build().render(RenderingStrategies.MYBATIS3);
-            int number = questionMapper.update(update);
+//            UpdateStatementProvider update = update(QuestionDynamicSqlSupport.question)
+//                    .set(QuestionDynamicSqlSupport.creator).equalTo(question.getCreator())
+//                    .set(QuestionDynamicSqlSupport.title).equalTo(question.getTitle())
+//                    .set(QuestionDynamicSqlSupport.description).equalTo(question.getDescription())
+//                    .set(QuestionDynamicSqlSupport.tag).equalTo(question.getTag())
+//                    .set(QuestionDynamicSqlSupport.gmtModified).equalTo(question.getGmtModified())
+//                    .where(QuestionDynamicSqlSupport.creator, isEqualTo(question.getCreator()))
+//                    .and(QuestionDynamicSqlSupport.id, isEqualTo(question.getId()))
+//                    .build().render(RenderingStrategies.MYBATIS3);
+            int number = questionMapper.updateByPrimaryKeySelective(question);
             if (number != 1) {
                 throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
             }

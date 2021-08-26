@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static mapper.UserDynamicSqlSupport.*;
+import static com.example.testproject.mapper.UserDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 /**
@@ -32,27 +32,20 @@ public class UserService {
                 .build().render(RenderingStrategies.MYBATIS3);
         Optional<User> optionalUser = userMapper.selectOne(selectStatementProvider);
         if (optionalUser.isPresent()) {
+            user.setGmtModified(System.currentTimeMillis());
             UpdateStatementProvider updateStatementProvider = update(UserDynamicSqlSupport.user)
-                    .set(token).equalTo(user.getToken())
-                    .set(avatarUrl).equalTo(user.getAvatarUrl())
                     .set(name).equalTo(user.getName())
+                    .set(avatarUrl).equalTo(user.getAvatarUrl())
                     .set(bio).equalTo(user.getBio())
-                    .set(gmtModified).equalTo(System.currentTimeMillis())
-                    .where(id, isEqualTo(optionalUser.get().getId()))
+                    .set(gmtModified).equalTo(user.getGmtModified())
+                    .set(token).equalTo(user.getToken())
+                    .where(accountId, isEqualTo(user.getAccountId()))
                     .build().render(RenderingStrategies.MYBATIS3);
             userMapper.update(updateStatementProvider);
         } else {
-            long time = System.currentTimeMillis();
-            InsertStatementProvider<User> insertStatementProvider = insert(user)
-                    .into(UserDynamicSqlSupport.user)
-                    .map(token).toConstant(user.getToken())
-                    .map(avatarUrl).toConstant(user.getAvatarUrl())
-                    .map(name).toConstant(user.getName())
-                    .map(bio).toConstant(user.getBio())
-                    .map(gmtCreate).toConstant(String.valueOf(time))
-                    .map(gmtModified).toConstant(String.valueOf(time))
-                    .build().render(RenderingStrategies.MYBATIS3);
-            userMapper.insert(insertStatementProvider);
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtModified());
+            userMapper.insert(user);
         }
     }
 }

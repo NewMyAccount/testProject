@@ -48,6 +48,7 @@ public class BaiduProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String string = Objects.requireNonNull(response.body()).string();
+            System.out.println(string);
             return JSON.parseObject(string, BaiduUser.class);
         } catch (IOException e) {
             e.printStackTrace();

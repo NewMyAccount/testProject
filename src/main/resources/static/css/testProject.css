@@ -25,11 +25,13 @@ html,body {
 }
 
 .myModal {
-    margin-top: 200px;
+    /*margin-top: 200px;*/
     width: 300px;
+    top:50%;
+    left:50%;
 }
 
-.mySmall {
+.publish-person {
     width: 25px;
     height: 25px;
 }

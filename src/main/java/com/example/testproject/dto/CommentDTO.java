@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class CommentDTO {
     private String content;
-    private String parentId;
+    private int parentId;
     private int type;
     private int commenter;
 }

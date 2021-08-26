@@ -107,8 +107,6 @@ public class AuthorizeController {
             userService.createOrUpdate(user);
             //给前端页面返回token
             response.addCookie(new Cookie("token", token));
-            //setAttribute()方法默认会写一个cookie
-            //request.getSession().setAttribute("githubUser", githubUser);
             return "redirect:/";
         }
         System.out.println("accessToken:" + accessToken);
