@@ -139,15 +139,6 @@ public class QuestionService {
             questionMapper.insertSelective(question);
         } else {
             question.setGmtModified(System.currentTimeMillis());
-//            UpdateStatementProvider update = update(QuestionDynamicSqlSupport.question)
-//                    .set(QuestionDynamicSqlSupport.creator).equalTo(question.getCreator())
-//                    .set(QuestionDynamicSqlSupport.title).equalTo(question.getTitle())
-//                    .set(QuestionDynamicSqlSupport.description).equalTo(question.getDescription())
-//                    .set(QuestionDynamicSqlSupport.tag).equalTo(question.getTag())
-//                    .set(QuestionDynamicSqlSupport.gmtModified).equalTo(question.getGmtModified())
-//                    .where(QuestionDynamicSqlSupport.creator, isEqualTo(question.getCreator()))
-//                    .and(QuestionDynamicSqlSupport.id, isEqualTo(question.getId()))
-//                    .build().render(RenderingStrategies.MYBATIS3);
             int number = questionMapper.updateByPrimaryKeySelective(question);
             if (number != 1) {
                 throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);

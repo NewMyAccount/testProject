@@ -3,7 +3,6 @@ package com.example.testproject.service;
 import com.example.testproject.mapper.UserDynamicSqlSupport;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.User;
-import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
@@ -44,7 +43,7 @@ public class UserService {
             userMapper.update(updateStatementProvider);
         } else {
             user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtModified());
+            user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
         }
     }

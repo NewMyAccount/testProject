@@ -30,6 +30,8 @@
 
 [thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 
+[jQuery](https://jquery.com/)
+
 ##工具
 
 [git](https://git-scm.com)

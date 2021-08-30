@@ -15,6 +15,7 @@ import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.Buildable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class CommentService {
     @Autowired
     QuestionMapper questionMapper;
 
+    @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null) {
             throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
@@ -39,15 +41,22 @@ public class CommentService {
         if (comment.getType() == null || !CommentTypeEnum.isExist(comment.getType())) {
             throw new CustomException(CustomErrorCode.TYPE_NOT_FOUND);
         }
-        //问题的评论
-        Optional<Question> questionExist = questionMapper.selectByPrimaryKey(comment.getParentId());
-        if (comment.getType().equals(CommentTypeEnum.TYPE_FIRST.getType()) && !questionExist.isPresent()) {
-            throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
+        if ("".equals(comment.getContent()) || comment.getContent() == null) {
+            throw new CustomException(CustomErrorCode.CONTENT_IS_EMPTY);
         }
-        //评论的评论
-        Optional<Comment> commentExist = commentMapper.selectByPrimaryKey(comment.getParentId());
-        if (comment.getType().equals(CommentTypeEnum.TYPE_SECOND.getType()) && !commentExist.isPresent()) {
-            throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
+
+        if (comment.getType().equals(CommentTypeEnum.TYPE_FIRST.getType())) {
+            //问题的评论
+            Optional<Question> questionExist = questionMapper.selectByPrimaryKey(comment.getParentId());
+            if (!questionExist.isPresent()) {
+                throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
+            }
+        } else if (comment.getType().equals(CommentTypeEnum.TYPE_SECOND.getType())) {
+            //评论的评论
+            Optional<Comment> commentExist = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if (!commentExist.isPresent()) {
+                throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
+            }
         }
         //更新评论
         commentMapper.insertSelective(comment);
@@ -58,7 +67,7 @@ public class CommentService {
                     .where(CommentDynamicSqlSupport.id, isEqualTo(comment.getParentId()))
                     .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()));
             //评论的评论需要通过二级评论的id找到问题的id
-            updateStatementProvider =  update(QuestionDynamicSqlSupport.question)
+            updateStatementProvider = update(QuestionDynamicSqlSupport.question)
                     .set(QuestionDynamicSqlSupport.commentCount)
                     .equalTo(add(QuestionDynamicSqlSupport.commentCount, constant("0"), constant("1")))
                     .where(QuestionDynamicSqlSupport.id, isEqualTo(sql))
