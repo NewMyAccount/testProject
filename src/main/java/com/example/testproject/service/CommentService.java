@@ -1,23 +1,25 @@
 package com.example.testproject.service;
 
+import com.example.testproject.dto.CommentDTO;
 import com.example.testproject.enums.CommentTypeEnum;
 import com.example.testproject.exception.CustomErrorCode;
 import com.example.testproject.exception.CustomException;
-import com.example.testproject.mapper.CommentDynamicSqlSupport;
-import com.example.testproject.mapper.CommentMapper;
-import com.example.testproject.mapper.QuestionDynamicSqlSupport;
-import com.example.testproject.mapper.QuestionMapper;
+import com.example.testproject.mapper.*;
 import com.example.testproject.model.Comment;
 import com.example.testproject.model.Question;
+import com.example.testproject.model.User;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.SelectModel;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.Buildable;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
@@ -32,6 +34,8 @@ public class CommentService {
     CommentMapper commentMapper;
     @Autowired
     QuestionMapper questionMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -44,7 +48,6 @@ public class CommentService {
         if ("".equals(comment.getContent()) || comment.getContent() == null) {
             throw new CustomException(CustomErrorCode.CONTENT_IS_EMPTY);
         }
-
         if (comment.getType().equals(CommentTypeEnum.TYPE_FIRST.getType())) {
             //问题的评论
             Optional<Question> questionExist = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -83,4 +86,38 @@ public class CommentService {
         }
         questionMapper.update(updateStatementProvider);
     }
+
+    //获取一级评论信息
+    public List<CommentDTO> findByQuestionId(Integer id) {
+        //获取一级评论
+        SelectStatementProvider selectStatementProvider = select(CommentDynamicSqlSupport.comment.allColumns())
+                .from(CommentDynamicSqlSupport.comment)
+                .where(CommentDynamicSqlSupport.comment.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()))
+                .and(CommentDynamicSqlSupport.comment.parentId, isEqualTo(id))
+                .orderBy(CommentDynamicSqlSupport.gmtCreate.descending())
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        List<Comment> comments = commentMapper.selectMany(selectStatementProvider);
+        if (comments.size() == 0) {
+            return new ArrayList<>();
+        }
+        Set<Integer> commentersId = comments.stream().map(Comment::getCommenter).collect(Collectors.toSet());
+        //获取评论人信息
+        SelectStatementProvider selectByUserMapper = select(UserDynamicSqlSupport.user.allColumns())
+                .from(UserDynamicSqlSupport.user)
+                .where(UserDynamicSqlSupport.user.id, isIn(commentersId))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        List<User> commentUsers = userMapper.selectMany(selectByUserMapper);
+        Map<Integer, User> userInfo = commentUsers.stream().collect(Collectors.toMap(User::getId, user -> user));
+
+        //转换为DTO返回
+        return comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userInfo.get(commentDTO.getCommenter()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+    }
+
 }

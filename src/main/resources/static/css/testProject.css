@@ -1,4 +1,4 @@
-html,body {
+html, body {
     background-color: #8e9ba8;
     height: 100%;
 }
@@ -34,15 +34,40 @@ html,body {
     height: 25px;
 }
 
-.comment-person{
+.comment-person {
     margin: 10px;
 }
 
-.media-body{
+.media-body {
     padding-top: 3px;
 }
 
-.comment-area{
+.comment-area {
     margin: 10px 0;
 }
 
+.comment-sp {
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.menu {
+    color: #999;
+    margin-top: 5px;
+}
+
+.menu .icon {
+    margin-right: 7px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.menu .icon:hover {
+    color: #499ef3;
+}
+
+.comments{
+    margin-bottom: 15px;
+    border-bottom: 1px solid #EEE;
+    padding-bottom: 5px;
+}

@@ -10,6 +10,17 @@
     <link rel="stylesheet" href="css/testProject.css">
     <!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 </head>
+
+<script type="application/javascript">
+    window.onload = function () {
+        let closable = window.localStorage.getItem("closable");
+        if (closable === "true") {
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+
 <body>
 <!--<p th:text="'Hello, ' + ${name} + '!'"/>-->
 <div th:insert="navigation :: navigation"></div>
@@ -27,12 +38,12 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4><a class="media-heading" th:href="@{'/questionDetail/' + ${question.id}}" th:text="${question.title}"></a></h4>
+                    <h4 class="media-heading"><a th:href="@{'/questionDetail/' + ${question.id}}"
+                           th:text="${question.title}"></a></h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="comment" id="comment">
                         <span th:text="${question.commentCount}"></span><span>个回复</span>
                         <span th:text="${question.viewCount}"></span><span>次浏览·</span>
-
                         <span th:text="${#dates.format(question.gmtModified, 'yyyy-MM-dd HH:mm')}"></span>
                     </span>
                 </div>

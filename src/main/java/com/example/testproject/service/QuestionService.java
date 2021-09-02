@@ -46,7 +46,10 @@ public class QuestionService {
         //偏移量，从第几个数据开始找
         int offset = size * (map.get("currentPage") - 1);
         SelectStatementProvider selectNum = select(question.allColumns())
-                .from(question).limit(size).offset(offset)
+                .from(question)
+                .orderBy(question.gmtCreate.descending())
+                .limit(size)
+                .offset(offset)
                 .build().render(RenderingStrategies.MYBATIS3);
         List<Question> questionList = questionMapper.selectMany(selectNum);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
@@ -65,7 +68,9 @@ public class QuestionService {
         SelectStatementProvider findTotalNumberById = select(count())
                 .from(question)
                 .where(question.creator, isEqualTo(user.getId()))
-                .build().render(RenderingStrategies.MYBATIS3);
+                .orderBy(question.gmtCreate.descending())
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
         long totalNumber = questionMapper.count(findTotalNumberById);
         Map<String, Integer> map = countPageNumber(page, size, (int) totalNumber);
         //偏移量，从第几个数据开始找

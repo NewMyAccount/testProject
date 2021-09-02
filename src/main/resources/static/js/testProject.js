@@ -1,8 +1,12 @@
 function post() {
-    var questionId = $("#id").val();
-    var content = $("#comment-content").val();
+    let questionId = $("#id").val();
+    let content = $("#comment-content").val();
     console.log(content);
     console.log(questionId);
+    if(!content){
+        alert("评论内容不能为空");
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/comment",
@@ -14,6 +18,18 @@ function post() {
         }),
         success: function (response) {
             console.log(response);
+            if (response.code === 200) {
+                window.location.reload();
+                // $("#comment-person").hide();
+            } else if (response.code === 3) {
+                let isAccepted = confirm(response.message);
+                if (isAccepted) {
+                    window.open("https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                    window.localStorage.setItem("closable", "true");
+                }
+            } else {
+                alert(response.message);
+            }
         },
         dataType: "json"
     })

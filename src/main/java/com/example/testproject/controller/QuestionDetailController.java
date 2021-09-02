@@ -1,12 +1,17 @@
 package com.example.testproject.controller;
 
+import com.example.testproject.dto.CommentDTO;
 import com.example.testproject.dto.QuestionDTO;
+import com.example.testproject.service.CommentService;
 import com.example.testproject.service.QuestionService;
+import org.dom4j.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * @Author: 张昕
@@ -17,11 +22,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class QuestionDetailController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/questionDetail/{id}")
     private String questionDetails(@PathVariable(name = "id") Integer id, Model model) {
         QuestionDTO questionDTO = questionService.findById(id);
+        List<CommentDTO> commentList = commentService.findByQuestionId(id);
         model.addAttribute("questionDetail", questionDTO);
+        model.addAttribute("comments", commentList);
         return "questionDetail";
     }
 }

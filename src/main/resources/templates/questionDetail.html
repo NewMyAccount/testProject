@@ -17,8 +17,8 @@
     <!--    将最外面的布局元素 .container 修改为 .container-fluid，就可以将固定宽度的栅格布局转换为 100% 宽度的布局。-->
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h4><span th:text="${questionDetail.title}"></span>
-            </h4>
+            <!--问题详情-->
+            <h4 style="margin-top: 25px"><span th:text="${questionDetail.title}"></span></h4>
             <span class="comment" id="comment">
                 <span>作者：</span><span th:text="${questionDetail.user.name}"></span><span> | </span>
                 <span>发布时间：</span><span
@@ -33,10 +33,36 @@
             <a th:href="@{/publish/{id}(id=${questionDetail.getId()})}"
                th:if="${session.user != null && session.user.accountId == questionDetail.user.accountId}">
                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"
-                      style="color: #999999;font-size: 13px">编辑问题</span>
+                      style="color: #999999;font-size: 13px;margin-bottom: 10px">编辑问题</span>
             </a>
             <br>
-            <div class="media comment-person">
+            <!--评论内容-->
+            <h4><span th:text="${questionDetail.commentCount}"></span>个回复</h4>
+            <hr class="comment-sp">
+            <div th:each="comment : ${comments}" class="comments">
+                <div class="media">
+                    <div class="media-left">
+                        <a th:href="@{'/questionDetail/' + ${questionDetail.id}}">
+                            <img class="img-rounded avatar"
+                                 th:src="${comment.user} != null ? ${comment.user.avatarUrl} : '' "
+                                 alt="">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading"><span th:text="${comment.user.name}"></span></h5>
+                        <div><span th:text="${comment.content}"></span></div>
+                        <div class="menu">
+                            <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                            <span class="glyphicon glyphicon-comment icon"></span>
+                            <span class="pull-right"
+                                  th:text="${#dates.format(comment.gmtModified, 'yyyy-MM-dd')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--评论区-->
+            <div class="media" id="comment-person">
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded publish-person"
@@ -47,10 +73,11 @@
                     <span th:text="${session.user} != null ? ${session.user.name} : '暂未登录，无法评论'"></span>
                 </div>
             </div>
-            <input hidden id="id" th:value="${questionDetail.getId()}">
-            <textarea class="form-control comment-area" rows="10" id="comment-content"></textarea>
+            <input hidden id="id" th:value="${questionDetail.getId()}"/>
+            <textarea class="form-control comment-area" rows="10" id="comment-content" placeholder="文明评论"></textarea>
             <button type="submit" class="btn btn-success btn-publish" onclick="post()">回复</button>
         </div>
+
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>发起人</h3>
             <div class="media">

@@ -1,6 +1,6 @@
 package com.example.testproject.controller;
 
-import com.example.testproject.dto.CommentDTO;
+import com.example.testproject.dto.CommentCreateDTO;
 import com.example.testproject.dto.ResultDTO;
 import com.example.testproject.exception.CustomErrorCode;
 import com.example.testproject.exception.CustomException;
@@ -28,14 +28,14 @@ public class CommentController {
 
     @ResponseBody
     @PostMapping("/comment")
-    public ResultDTO doComment(@RequestBody CommentDTO commentDTO,
+    public ResultDTO doComment(@RequestBody CommentCreateDTO commentCreateDTO,
                                HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         Comment comment = new Comment();
-        BeanUtils.copyProperties(commentDTO, comment);
+        BeanUtils.copyProperties(commentCreateDTO, comment);
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommenter(user.getId());
