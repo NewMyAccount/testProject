@@ -1,9 +1,12 @@
+/**
+ * 一级评论
+ */
 function post() {
     let questionId = $("#id").val();
     let content = $("#comment-content").val();
     console.log(content);
     console.log(questionId);
-    if(!content){
+    if (!content) {
         alert("评论内容不能为空");
         return;
     }
@@ -33,4 +36,13 @@ function post() {
         },
         dataType: "json"
     })
+}
+
+/**
+ * 展开二级评论
+ */
+function comment(e) {
+    let id = e.getAttribute("data-id");
+    $("#comment-" + id).toggle("in");
+    e.classList.toggle("active");
 }

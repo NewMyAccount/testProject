@@ -43,7 +43,7 @@
                 <div class="media">
                     <div class="media-left">
                         <a th:href="@{'/questionDetail/' + ${questionDetail.id}}">
-                            <img class="img-rounded avatar"
+                            <img class="img-rounded comment-avatar"
                                  th:src="${comment.user} != null ? ${comment.user.avatarUrl} : '' "
                                  alt="">
                         </a>
@@ -53,9 +53,37 @@
                         <div><span th:text="${comment.content}"></span></div>
                         <div class="menu">
                             <span class="glyphicon glyphicon-thumbs-up icon"></span>
-                            <span class="glyphicon glyphicon-comment icon"></span>
+                            <span class="glyphicon glyphicon-comment icon" onclick="comment(this)"
+                                  th:data-id="${comment.id}"></span>
                             <span class="pull-right"
                                   th:text="${#dates.format(comment.gmtModified, 'yyyy-MM-dd')}"></span>
+                        </div>
+                        <!--二级评论-->
+                        <div class="collapse sub-comment" th:id="${'comment-' + comment.id}">
+                            <div th:each="comment : ${comments}" class="comments">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a th:href="@{'/questionDetail/' + ${questionDetail.id}}">
+                                            <img class="img-rounded comment-avatar"
+                                                 th:src="${comment.user} != null ? ${comment.user.avatarUrl} : '' "
+                                                 alt="">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h6 class="media-heading"><span th:text="${comment.user.name}"></span></h6>
+                                        <div><span th:text="${comment.content}"></span></div>
+                                        <div class="menu">
+                                            <span class="pull-right"
+                                                  th:text="${#dates.format(comment.gmtModified, 'yyyy-MM-dd')}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--二级评论的评论区-->
+                            <div style="margin-bottom: 40px">
+                                <input type="text" class="form-control" placeholder="文明评论">
+                                <button type="button" class="btn btn-success pull-right">评论</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,7 +102,8 @@
                 </div>
             </div>
             <input hidden id="id" th:value="${questionDetail.getId()}"/>
-            <textarea class="form-control comment-area" rows="10" id="comment-content" placeholder="文明评论"></textarea>
+            <textarea class="form-control comment-area" rows="10" id="comment-content"
+                      placeholder="文明评论"></textarea>
             <button type="submit" class="btn btn-success btn-publish" onclick="post()">回复</button>
         </div>
 
@@ -84,7 +113,8 @@
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded publish-person"
-                             th:src="${questionDetail.user} != null ? ${questionDetail.user.avatarUrl} : '' " alt="">
+                             th:src="${questionDetail.user} != null ? ${questionDetail.user.avatarUrl} : '' "
+                             alt="">
                     </a>
                 </div>
                 <div class="media-body">

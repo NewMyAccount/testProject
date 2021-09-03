@@ -9,6 +9,7 @@ html, body {
 }
 
 .btn-publish {
+    margin-top: 5px;
     float: right;
     margin-bottom: 15px;
 }
@@ -62,12 +63,32 @@ html, body {
     cursor: pointer;
 }
 
+.menu .active {
+    color: #499ef3;
+}
+
 .menu .icon:hover {
     color: #499ef3;
 }
 
-.comments{
+.comment-avatar {
+    width: 35px;
+    height: 35px;
+}
+
+.comments {
     margin-bottom: 15px;
     border-bottom: 1px solid #EEE;
     padding-bottom: 5px;
+}
+
+.sub-comment {
+    margin: 12px 2px;
+    border: 1px solid #EEE;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.sub-comment .btn {
+    margin: 10px 0;
 }
