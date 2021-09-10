@@ -76,6 +76,15 @@ public class CommentService {
                     .where(QuestionDynamicSqlSupport.id, isEqualTo(sql))
                     .build()
                     .render(RenderingStrategies.MYBATIS3);
+            //还需要增加该评论的评论数量
+            UpdateStatementProvider commentCount = update(CommentDynamicSqlSupport.comment)
+                    .set(CommentDynamicSqlSupport.commentCount)
+                    .equalTo(add(CommentDynamicSqlSupport.commentCount, constant("0"), constant("1")))
+                    .where(CommentDynamicSqlSupport.id, isEqualTo(comment.getParentId()))
+                    .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()))
+                    .build()
+                    .render(RenderingStrategies.MYBATIS3);
+            commentMapper.update(commentCount);
         } else {
             //问题的评论，那么问题的评论数量直接加1
             updateStatementProvider = update(QuestionDynamicSqlSupport.question)
@@ -88,11 +97,11 @@ public class CommentService {
     }
 
     //获取一级评论信息
-    public List<CommentDTO> findByQuestionId(Integer id) {
+    public List<CommentDTO> findById(Integer id, CommentTypeEnum typeEnum) {
         //获取一级评论
         SelectStatementProvider selectStatementProvider = select(CommentDynamicSqlSupport.comment.allColumns())
                 .from(CommentDynamicSqlSupport.comment)
-                .where(CommentDynamicSqlSupport.comment.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()))
+                .where(CommentDynamicSqlSupport.comment.type, isEqualTo(typeEnum.getType()))
                 .and(CommentDynamicSqlSupport.comment.parentId, isEqualTo(id))
                 .orderBy(CommentDynamicSqlSupport.gmtCreate.descending())
                 .build()
@@ -119,5 +128,4 @@ public class CommentService {
             return commentDTO;
         }).collect(Collectors.toList());
     }
-
 }

@@ -6,6 +6,7 @@
     <script src="/js/jquery-3.3.1.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/testProject.js"></script>
+    <script src="/js/moment.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/testProject.css">
@@ -53,36 +54,21 @@
                         <div><span th:text="${comment.content}"></span></div>
                         <div class="menu">
                             <span class="glyphicon glyphicon-thumbs-up icon"></span>
-                            <span class="glyphicon glyphicon-comment icon" onclick="comment(this)"
-                                  th:data-id="${comment.id}"></span>
+                            <span class="glyphicon glyphicon-comment icon" onclick="commentList(this)"
+                                  th:data-id="${comment.id}" th:text="${comment.commentCount}"></span>
                             <span class="pull-right"
                                   th:text="${#dates.format(comment.gmtModified, 'yyyy-MM-dd')}"></span>
                         </div>
                         <!--二级评论-->
                         <div class="collapse sub-comment" th:id="${'comment-' + comment.id}">
-                            <div th:each="comment : ${comments}" class="comments">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a th:href="@{'/questionDetail/' + ${questionDetail.id}}">
-                                            <img class="img-rounded comment-avatar"
-                                                 th:src="${comment.user} != null ? ${comment.user.avatarUrl} : '' "
-                                                 alt="">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h6 class="media-heading"><span th:text="${comment.user.name}"></span></h6>
-                                        <div><span th:text="${comment.content}"></span></div>
-                                        <div class="menu">
-                                            <span class="pull-right"
-                                                  th:text="${#dates.format(comment.gmtModified, 'yyyy-MM-dd')}"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--通过js拼接的页面加载在这里 -->
                             <!--二级评论的评论区-->
                             <div style="margin-bottom: 40px">
-                                <input type="text" class="form-control" placeholder="文明评论">
-                                <button type="button" class="btn btn-success pull-right">评论</button>
+                                <input type="text" class="form-control" placeholder="文明评论"
+                                       th:id="${'reply-' + comment.id}">
+                                <button type="button" class="btn btn-success pull-right" onclick="reply(this)"
+                                        th:data-id="${comment.id}">评论
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -104,7 +90,7 @@
             <input hidden id="id" th:value="${questionDetail.getId()}"/>
             <textarea class="form-control comment-area" rows="10" id="comment-content"
                       placeholder="文明评论"></textarea>
-            <button type="submit" class="btn btn-success btn-publish" onclick="post()">回复</button>
+            <button type="submit" class="btn btn-success btn-publish" onclick="comment()">回复</button>
         </div>
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">

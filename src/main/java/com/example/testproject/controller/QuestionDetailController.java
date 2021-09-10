@@ -2,9 +2,9 @@ package com.example.testproject.controller;
 
 import com.example.testproject.dto.CommentDTO;
 import com.example.testproject.dto.QuestionDTO;
+import com.example.testproject.enums.CommentTypeEnum;
 import com.example.testproject.service.CommentService;
 import com.example.testproject.service.QuestionService;
-import org.dom4j.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,7 @@ public class QuestionDetailController {
     @GetMapping("/questionDetail/{id}")
     private String questionDetails(@PathVariable(name = "id") Integer id, Model model) {
         QuestionDTO questionDTO = questionService.findById(id);
-        List<CommentDTO> commentList = commentService.findByQuestionId(id);
+        List<CommentDTO> commentList = commentService.findById(id, CommentTypeEnum.TYPE_FIRST);
         model.addAttribute("questionDetail", questionDTO);
         model.addAttribute("comments", commentList);
         return "questionDetail";
