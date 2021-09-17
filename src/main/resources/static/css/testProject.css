@@ -104,3 +104,11 @@ html, body {
     padding-left: 0;
     text-decoration: crimson;
 }
+
+.question-tagCategory {
+    margin: 5px 0;
+}
+
+.question-tagCategory .label-info {
+    margin-right: 7px;
+}

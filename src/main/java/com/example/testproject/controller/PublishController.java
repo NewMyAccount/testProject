@@ -1,9 +1,11 @@
 package com.example.testproject.controller;
 
+import com.example.testproject.cache.TagCache;
 import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import com.example.testproject.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: 张昕
@@ -25,17 +28,19 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish/{id}")
-    public String editQuestion(@PathVariable(name = "id") Integer id, Model model){
+    public String editQuestion(@PathVariable(name = "id") Integer id, Model model) {
         QuestionDTO question = questionService.findById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -49,6 +54,13 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", TagCache.get());
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            model.addAttribute("error", "用户未登录");
+            return "publish";
+        }
+
         if (title == null || "".equals(title)) {
             model.addAttribute("error", "title不能为空");
             return "publish";
@@ -61,11 +73,12 @@ public class PublishController {
             model.addAttribute("error", "tag不能为空");
             return "publish";
         }
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            model.addAttribute("error", "用户未登录");
+        String inValidTag = TagCache.inValidTag(tag);
+        if (StringUtils.isNotBlank(inValidTag)) {
+            model.addAttribute("error", "非法标签:" + inValidTag);
             return "publish";
         }
+
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
