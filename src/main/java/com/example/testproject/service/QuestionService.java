@@ -5,6 +5,7 @@ import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.exception.CustomErrorCode;
 import com.example.testproject.exception.CustomException;
 import com.example.testproject.mapper.QuestionDynamicSqlSupport;
+import com.example.testproject.mapper.QuestionExtMapper;
 import com.example.testproject.mapper.QuestionMapper;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.Question;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static com.example.testproject.mapper.QuestionDynamicSqlSupport.id;
 import static com.example.testproject.mapper.QuestionDynamicSqlSupport.question;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
@@ -31,6 +34,8 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -149,5 +154,16 @@ public class QuestionService {
                 throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public List<QuestionDTO> findRelatedQuestion(QuestionDTO presentQuestion) {
+        String[] tags = presentQuestion.getTag().split(",");
+        String tag = Arrays.asList(tags).stream().collect(Collectors.joining("|"));
+        List<Question> relatedQuestions = questionExtMapper.selectWithWhereClause(tag);
+        return relatedQuestions.stream().map(relatedQuestion -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(relatedQuestion, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
     }
 }

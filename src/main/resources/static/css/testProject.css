@@ -92,3 +92,15 @@ html, body {
 .sub-comment .btn {
     margin: 10px 0;
 }
+
+.question-tag {
+    margin-right: 8px;
+}
+
+.question-related {
+    line-height: 20px;
+    font-size: 12px;
+    list-style: none;
+    padding-left: 0;
+    text-decoration: crimson;
+}

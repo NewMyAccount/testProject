@@ -29,7 +29,11 @@
             <hr>
             <p th:text="${questionDetail.description}"></p>
             <hr>
-            <p th:text="${questionDetail.tag}"></p>
+            <span class="label label-info question-tag" th:each="tag : ${questionDetail.tag.split(',')}">
+                <span class="glyphicon glyphicon-tags"></span>
+                <span class="label label-info" th:text="${tag}"></span>
+            </span>
+
             <hr>
             <a th:href="@{/publish/{id}(id=${questionDetail.getId()})}"
                th:if="${session.user != null && session.user.accountId == questionDetail.user.accountId}">
@@ -109,6 +113,12 @@
             </div>
             <hr>
             <h3>相关问题</h3>
+            <ul class="question-related">
+                <li th:each="question : ${relatedQuestions}">
+                    <a th:href="@{'/questionDetail/' + ${question.id}}" th:text="${question.title}"></a>
+                </li>
+            </ul>
+
         </div>
     </div>
 </div>

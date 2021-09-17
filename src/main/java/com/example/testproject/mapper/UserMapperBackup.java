@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.*;
  * @Date： 2021/7/26
  * @Time: 15:46
  **/
-/*@Mapper
-public interface UserMapper {
+@Mapper
+public interface UserMapperBackup {
     @Insert("insert into user (name, account_id, token, gmt_create,gmt_modified, bio, avatar_url) values (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified}, #{bio}, #{avatarUrl})")
     void insert(User user);
 
@@ -24,4 +24,4 @@ public interface UserMapper {
 
     @Select("select * from user where account_id = #{accountId}")
     User findByAccountId(String accountId);
-}*/
+}
