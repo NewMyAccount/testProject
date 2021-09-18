@@ -73,7 +73,6 @@ public class QuestionService {
         SelectStatementProvider findTotalNumberById = select(count())
                 .from(question)
                 .where(question.creator, isEqualTo(user.getId()))
-                .orderBy(question.gmtCreate.descending())
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
         long totalNumber = questionMapper.count(findTotalNumberById);
@@ -83,6 +82,7 @@ public class QuestionService {
         SelectStatementProvider selectById = select(question.allColumns())
                 .from(question)
                 .where(question.creator, isEqualTo(user.getId()))
+                .orderBy(question.gmtCreate.descending())
                 .limit(size)
                 .offset(offset)
                 .build().render(RenderingStrategies.MYBATIS3);

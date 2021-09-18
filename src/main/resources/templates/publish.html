@@ -40,17 +40,21 @@
 
                 <div class="question-tagCategory" style="display: none;">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" th:each="category:${tags}">
-                            <a th:href="${'#' + category.getCategoryName()}" aria-controls="home" role="tab" data-toggle="tab"
+                        <li role="presentation" th:each="category, stat:${tags}"
+                            th:class="${stat.first ? 'active' : ''}">
+                            <a th:href="${'#' + category.getCategoryName()}" aria-controls="home" role="tab"
+                               data-toggle="tab"
                                th:text="${category.getCategoryName()}"
                                th:data-tag="${category.getCategoryName()}"></a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane" th:id="${category.getCategoryName()}" th:each="category:${tags}">
+                        <div role="tabpanel" th:id="${category.getCategoryName()}"
+                             th:each="category, stat:${tags}"
+                             th:class="${stat.first ? 'tab-pane active' : 'tab-pane'}">
                             <span class="label label-info" th:each="tagName: ${category.tags}">
                                 <span class="glyphicon glyphicon-tags" onclick="selectTag(this)"
-                                      th:text="${tagName}"
+                                      th:text="${' ' + tagName}"
                                       th:data-tag="${tagName}"></span>
                             </span>
                         </div>

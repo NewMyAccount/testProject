@@ -33,6 +33,9 @@
                         <span th:text="${question.commentCount}"></span><span>个回复</span>
                         <span th:text="${question.viewCount}"></span><span>次浏览·</span>
                         <span th:text="${#dates.format(question.gmtModified, 'yyyy-MM-dd HH:mm')}"></span>
+                        <a th:href="@{/publish/{id}(id=${question.getId()})}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color: #999999;font-size: 12px;margin-bottom: 10px;margin-left:4px">编辑问题</span>
+                        </a>
                     </span>
                 </div>
             </div>
