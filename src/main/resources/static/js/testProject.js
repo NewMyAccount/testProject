@@ -127,7 +127,6 @@ function showTags() {
 function selectTag(e) {
     let current = $("#tag").val();
     console.log(current);
-    debugger;
     if (current) {
         if (current.indexOf(e.getAttribute("data-tag")) == -1) {
             $("#tag").val(current + ',' + e.getAttribute("data-tag"));

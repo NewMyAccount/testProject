@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: 张昕
@@ -20,7 +22,7 @@ public class PageProvider {
     @Autowired
     QuestionMapper questionMapper;
 
-    public PaginationDTO pageHelper(List<QuestionDTO> questionDTOList, Integer page, Integer pageNumber) {
+    public <T> PaginationDTO pageHelper(List<T> list, Integer page, Integer pageNumber) {
         PaginationDTO paginationDTO = new PaginationDTO();
 
         List<Integer> pageList = new ArrayList<>();
@@ -41,10 +43,32 @@ public class PageProvider {
         paginationDTO.setShowFirstPage(!pageList.contains(1));
         //是否展示末页
         paginationDTO.setShowLastPage(!pageList.contains(pageNumber));
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(list);
         paginationDTO.setTotalNumber(pageNumber);
         paginationDTO.setPages(pageList);
         paginationDTO.setCurrentPage(page);
         return paginationDTO;
+    }
+
+    public Map<String, Integer> countPageNumber(Integer page, Integer size, Integer totalNumber) {
+        if (page < 1) {
+            page = 1;
+        } else if (totalNumber != 0 && page > totalNumber) {
+            page = totalNumber;
+        } else if (totalNumber == 0) {
+            page = 1;
+        }
+        //总页数
+        int totalPageNumber;
+        if (totalNumber % size == 0) {
+            totalPageNumber = totalNumber / size;
+        } else {
+            totalPageNumber = totalNumber / size + 1;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        map.put("currentPage", page);
+        //个数为0的情况下页数计算结果也为0，页数为0的情况下返回1。
+        map.put("totalPageNumber", totalPageNumber != 0 ? totalPageNumber : 1);
+        return map;
     }
 }

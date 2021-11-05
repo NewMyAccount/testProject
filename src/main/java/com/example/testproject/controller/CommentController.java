@@ -2,7 +2,6 @@ package com.example.testproject.controller;
 
 import com.example.testproject.dto.CommentCreateDTO;
 import com.example.testproject.dto.CommentDTO;
-import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.dto.ResultDTO;
 import com.example.testproject.enums.CommentTypeEnum;
 import com.example.testproject.exception.CustomErrorCode;
@@ -14,7 +13,6 @@ import com.example.testproject.service.QuestionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +50,7 @@ public class CommentController {
     @ResponseBody
     @GetMapping("/comment/{commentId}")
     public ResultDTO<List<CommentDTO>> subComment(@PathVariable(name = "commentId") Integer commentId) {
-        List<CommentDTO> commentList = commentService.findById(commentId, CommentTypeEnum.TYPE_SECOND);
+        List<CommentDTO> commentList = commentService.findById(commentId, CommentTypeEnum.REPLY_TYPE);
         return ResultDTO.okOf(commentList);
     }
 

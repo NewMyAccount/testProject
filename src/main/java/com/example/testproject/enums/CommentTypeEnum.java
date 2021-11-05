@@ -7,8 +7,8 @@ package com.example.testproject.enums;
  **/
 
 public enum CommentTypeEnum {
-    TYPE_FIRST(1),
-    TYPE_SECOND(2)
+    COMMENT_TYPE(1),
+    REPLY_TYPE(2)
     ;
     private final Integer type;
 

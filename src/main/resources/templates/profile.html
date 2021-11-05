@@ -16,10 +16,10 @@
 <div class="container-fluid main">
     <!--    将最外面的布局元素 .container 修改为 .container-fluid，就可以将固定宽度的栅格布局转换为 100% 宽度的布局。-->
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'questions'}">
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true" th:text="${sectionName}"></span></h2>
             <hr>
-            <div class="media" th:each="question: ${pagination.questions}">
+            <div class="media" th:each="question: ${pagination.data}">
                 <div class="media-left">
                     <a th:href="@{'/questionDetail/' + ${question.id}}">
                         <img class="img-rounded avatar"
@@ -39,15 +39,32 @@
                     </span>
                 </div>
             </div>
-
         </div>
+
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'replies'}">
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true" th:text="${sectionName}"></span></h2>
+            <hr style="margin-bottom: 5px">
+            <div class="media" th:each="notification: ${pagination.data}" style="margin-top: 0">
+                <div class="media-body">
+                    <p class="media-heading">
+                        <span th:text="${notification.notifier.name + ' ' + notification.type + ' '}"></span>
+                        <a th:href="@{'/notification/' + ${notification.id}}" th:text="${notification.title}"></a>
+                        <span class="label label-danger" th:if="${notification.status == 0}">New</span>
+                    </p>
+
+                    <span class="comment" th:text="${#dates.format(notification.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
+                    <hr class="comment-sp">
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group" style="margin-top: 15px">
                 <a href="/profile/questions"
                    th:class="${section == 'questions'}? 'active list-group-item':'list-group-item'">我的问题</a>
                 <a href="/profile/replies"
                    th:class="${section == 'replies'}? 'active list-group-item':'list-group-item'"><span
-                        class="badge">14</span>最新回复</a>
+                        class="badge" th:text="${session.unreadCount}"></span>最新回复</a>
             </div>
         </div>
     </div>

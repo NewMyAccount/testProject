@@ -28,7 +28,7 @@ public class QuestionDetailController {
     @GetMapping("/questionDetail/{id}")
     private String questionDetails(@PathVariable(name = "id") Integer id, Model model) {
         QuestionDTO questionDTO = questionService.findById(id);
-        List<CommentDTO> commentList = commentService.findById(id, CommentTypeEnum.TYPE_FIRST);
+        List<CommentDTO> commentList = commentService.findById(id, CommentTypeEnum.COMMENT_TYPE);
         List<QuestionDTO> questionDTOList = questionService.findRelatedQuestion(questionDTO);
         model.addAttribute("questionDetail", questionDTO);
         model.addAttribute("comments", commentList);

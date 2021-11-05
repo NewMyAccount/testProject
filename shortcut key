@@ -18,6 +18,9 @@ alt + shift + i 重构方法体到变量名里面
 
 idea:
 选中new 对象名（） ctrl + alt + v  快速new对象
+ctrl + alt + p 抽出一个参数
+ctrl + alt + m 抽出一个方法
+
 ctrl + shift + f12 最大化窗口
 Ctrl+Alt+left/right，返回至上次浏览的位置
 ctrl + shift + f4 关闭所有文件

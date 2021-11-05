@@ -3,6 +3,7 @@ package com.example.testproject.interceptor;
 import com.example.testproject.mapper.UserDynamicSqlSupport;
 import com.example.testproject.mapper.UserMapper;
 import com.example.testproject.model.User;
+import com.example.testproject.service.NotificationService;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
@@ -28,6 +29,8 @@ import static org.mybatis.dynamic.sql.SqlBuilder.select;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
@@ -45,6 +48,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     if (user.isPresent()) {
                         //把user对象写入session
                         request.getSession().setAttribute("user", user.get());
+
+                        request.getSession().setAttribute("unreadCount", notificationService.unreadCount(user.get()));
                         break;
                     }
                 }

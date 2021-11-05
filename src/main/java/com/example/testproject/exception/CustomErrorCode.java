@@ -12,7 +12,9 @@ public enum CustomErrorCode {
     TYPE_NOT_FOUND(2, "回复类型不明确"),
     USER_NOT_FOUND(3, "用户未登录"),
     CONTENT_IS_EMPTY(4, "评论内容为空"),
-    COMMENT_NOT_FOUND(5, "该评论不存在")
+    COMMENT_NOT_FOUND(5, "该评论不存在"),
+    USER_VERIFY_FAIL(6, "这不是你的评论"),
+    NOTIFICATION_NOT_FOUND(7, "通知不存在了"),
     ;
 
     private final Integer code;

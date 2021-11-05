@@ -2,10 +2,13 @@ package com.example.testproject.service;
 
 import com.example.testproject.dto.CommentDTO;
 import com.example.testproject.enums.CommentTypeEnum;
+import com.example.testproject.enums.NotifyStatusEnum;
+import com.example.testproject.enums.NotifyTypeEnum;
 import com.example.testproject.exception.CustomErrorCode;
 import com.example.testproject.exception.CustomException;
 import com.example.testproject.mapper.*;
 import com.example.testproject.model.Comment;
+import com.example.testproject.model.Notification;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
@@ -36,6 +39,8 @@ public class CommentService {
     QuestionMapper questionMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -48,13 +53,13 @@ public class CommentService {
         if ("".equals(comment.getContent()) || comment.getContent() == null) {
             throw new CustomException(CustomErrorCode.CONTENT_IS_EMPTY);
         }
-        if (comment.getType().equals(CommentTypeEnum.TYPE_FIRST.getType())) {
+        if (comment.getType().equals(CommentTypeEnum.COMMENT_TYPE.getType())) {
             //问题的评论
             Optional<Question> questionExist = questionMapper.selectByPrimaryKey(comment.getParentId());
             if (!questionExist.isPresent()) {
                 throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
             }
-        } else if (comment.getType().equals(CommentTypeEnum.TYPE_SECOND.getType())) {
+        } else if (comment.getType().equals(CommentTypeEnum.REPLY_TYPE.getType())) {
             //评论的评论
             Optional<Comment> commentExist = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (!commentExist.isPresent()) {
@@ -65,10 +70,10 @@ public class CommentService {
         commentMapper.insertSelective(comment);
         //更新问题的评论数量
         UpdateStatementProvider updateStatementProvider;
-        if (comment.getType().equals(CommentTypeEnum.TYPE_SECOND.getType())) {
+        if (comment.getType().equals(CommentTypeEnum.REPLY_TYPE.getType())) {
             Buildable<SelectModel> sql = select(CommentDynamicSqlSupport.parentId).from(CommentDynamicSqlSupport.comment)
                     .where(CommentDynamicSqlSupport.id, isEqualTo(comment.getParentId()))
-                    .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()));
+                    .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.COMMENT_TYPE.getType()));
             //评论的评论需要通过二级评论的id找到问题的id
             updateStatementProvider = update(QuestionDynamicSqlSupport.question)
                     .set(QuestionDynamicSqlSupport.commentCount)
@@ -81,10 +86,12 @@ public class CommentService {
                     .set(CommentDynamicSqlSupport.commentCount)
                     .equalTo(add(CommentDynamicSqlSupport.commentCount, constant("0"), constant("1")))
                     .where(CommentDynamicSqlSupport.id, isEqualTo(comment.getParentId()))
-                    .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.TYPE_FIRST.getType()))
+                    .and(CommentDynamicSqlSupport.type, isEqualTo(CommentTypeEnum.COMMENT_TYPE.getType()))
                     .build()
                     .render(RenderingStrategies.MYBATIS3);
             commentMapper.update(commentCount);
+            //通知被评论人
+            notice(comment.getCommenter(), comment.getParentId(), NotifyTypeEnum.REPLY_TYPE);
         } else {
             //问题的评论，那么问题的评论数量直接加1
             updateStatementProvider = update(QuestionDynamicSqlSupport.question)
@@ -92,9 +99,36 @@ public class CommentService {
                     .equalTo(add(QuestionDynamicSqlSupport.commentCount, constant("0"), constant("1")))
                     .where(QuestionDynamicSqlSupport.id, isEqualTo(comment.getParentId()))
                     .build().render(RenderingStrategies.MYBATIS3);
+            //通知被评论人
+            notice(comment.getCommenter(), comment.getParentId(), NotifyTypeEnum.COMMENT_TYPE);
         }
         questionMapper.update(updateStatementProvider);
     }
+
+    private void notice(Integer notifier, Integer id, NotifyTypeEnum notifyTypeEnum) {
+        Notification notification = new Notification();
+        if (notifyTypeEnum.getType().equals(NotifyTypeEnum.COMMENT_TYPE.getType())) {
+            //通过问题的id获取问题发起人的id
+            SelectStatementProvider selectStatementProvider = select(QuestionDynamicSqlSupport.creator)
+                    .from(QuestionDynamicSqlSupport.question)
+                    .where(QuestionDynamicSqlSupport.id, isEqualTo(id))
+                    .build()
+                    .render(RenderingStrategies.MYBATIS3);
+            Optional<Question> question = questionMapper.selectOne(selectStatementProvider);
+            notification.setReceiver(question.get().getCreator());
+        } else {
+            //通过回复的id获取被回复人的id
+            Optional<Comment> comment = commentMapper.selectByPrimaryKey(id);
+            notification.setReceiver(comment.get().getCommenter());
+        }
+        notification.setNotifier(notifier);
+        notification.setType(notifyTypeEnum.getType());
+        notification.setStatus(NotifyStatusEnum.UNREAD.getStatus());//未读
+        notification.setOuterId(id);
+        notification.setGmtCreate(System.currentTimeMillis());
+        notificationMapper.insertSelective(notification);
+    }
+
 
     //获取一级评论信息
     public List<CommentDTO> findById(Integer id, CommentTypeEnum typeEnum) {

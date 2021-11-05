@@ -47,7 +47,7 @@ public class QuestionService {
                 .from(question).build().render(RenderingStrategies.MYBATIS3);
         long totalNumber = questionMapper.count(selectStatementProvider);
         //页数少的情况下可以这么用
-        Map<String, Integer> map = countPageNumber(page, size, (int) totalNumber);
+        Map<String, Integer> map = pageProvider.countPageNumber(page, size, (int) totalNumber);
         //偏移量，从第几个数据开始找
         int offset = size * (map.get("currentPage") - 1);
         SelectStatementProvider selectNum = select(question.allColumns())
@@ -76,7 +76,7 @@ public class QuestionService {
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
         long totalNumber = questionMapper.count(findTotalNumberById);
-        Map<String, Integer> map = countPageNumber(page, size, (int) totalNumber);
+        Map<String, Integer> map = pageProvider.countPageNumber(page, size, (int) totalNumber);
         //偏移量，从第几个数据开始找
         int offset = size * (map.get("currentPage") - 1);
         SelectStatementProvider selectById = select(question.allColumns())
@@ -95,28 +95,6 @@ public class QuestionService {
             questionDTO.setUser(user);
         }
         return pageProvider.pageHelper(questionDTOList, map.get("currentPage"), map.get("totalPageNumber"));
-    }
-
-    private Map<String, Integer> countPageNumber(Integer page, Integer size, Integer totalNumber) {
-        if (page < 1) {
-            page = 1;
-        } else if (totalNumber != 0 && page > totalNumber) {
-            page = totalNumber;
-        } else if (totalNumber == 0) {
-            page = 1;
-        }
-        //总页数
-        int totalPageNumber;
-        if (totalNumber % size == 0) {
-            totalPageNumber = totalNumber / size;
-        } else {
-            totalPageNumber = totalNumber / size + 1;
-        }
-        Map<String, Integer> map = new HashMap<>();
-        map.put("currentPage", page);
-        //个数为0的情况下页数计算结果也为0，页数为0的情况下返回1。
-        map.put("totalPageNumber", totalPageNumber != 0 ? totalPageNumber : 1);
-        return map;
     }
 
     public QuestionDTO findById(Integer id) {
@@ -160,7 +138,8 @@ public class QuestionService {
         String[] tags = presentQuestion.getTag().split(",");
         String tag = Arrays.asList(tags).stream().collect(Collectors.joining("|"));
         List<Question> relatedQuestions = questionExtMapper.selectWithWhereClause(tag);
-        return relatedQuestions.stream().map(relatedQuestion -> {
+        return relatedQuestions.stream().filter(relatedQuestion -> !relatedQuestion.getId().equals(presentQuestion.getId()))
+                .map(relatedQuestion -> {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(relatedQuestion, questionDTO);
             return questionDTO;
