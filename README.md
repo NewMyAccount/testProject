@@ -32,6 +32,12 @@
 
 [jQuery](https://jquery.com/)
 
+[markdown](http://editor.md.ipandao.com/)
+
+[markdown_github](https://github.com/pandao/editor.md)
+
+[postman]
+
 ##工具
 
 [git](https://git-scm.com)
@@ -52,7 +58,7 @@
 
 [lombok](https://projectlombok.org/)
 
-[postman插件已下载]
+
 ##tomcat、 spring、 spring mvc、 servlet、jvm 关系和联系 
 
 ##脚本

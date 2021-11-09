@@ -110,6 +110,7 @@ html, body {
 }
 
 .question-tagCategory .label-info {
+    /*white-sapce 会控制span里面的标签自动换行*/
     white-space: normal;
     margin: 5px 5px;
     display: inline-block;

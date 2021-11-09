@@ -40,9 +40,11 @@ function post(id, type, content) {
         success: function (response) {
             console.log(response);
             if (response.code === 200) {
+                //重新请求页面
                 window.location.reload();
                 // $("#comment-person").hide();
             } else if (response.code === 3) {
+                //code === 3，未登录
                 let isAccepted = confirm(response.message);
                 if (isAccepted) {
                     window.open("https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
@@ -62,15 +64,19 @@ function post(id, type, content) {
 function commentList(e) {
     //评论的id
     let id = e.getAttribute("data-id");
+    //toggleClass会给collapse添加删除in字段来展开折叠二级评论
     let commentFather = $("#comment-" + id).toggleClass("in");
+    //给评论按钮添加高亮,原生js的写法
     e.classList.toggle("active");
     if (commentFather.hasClass("in")) {
         $.getJSON("/comment/" + id, function (data) {
+            //data是调用get请求返回的json数据
             console.log(data.data);
             //return保证多次点击不会重复加载数据
             if ($("#comment-" + id).children().length > 1) {
                 return;
             }
+            //each遍历data的每一个数据，functionde key是data的下标，value是值。
             $.each(data.data.reverse(), function (key, value) {
                 console.log(key)
                 console.log(value);
@@ -125,12 +131,15 @@ function showTags() {
 }
 
 function selectTag(e) {
+    //标签原有的值
     let current = $("#tag").val();
     console.log(current);
     if (current) {
+        //多次点击同一个标签，保证只有一个。
         if (current.indexOf(e.getAttribute("data-tag")) == -1) {
             $("#tag").val(current + ',' + e.getAttribute("data-tag"));
         } else {
+            //已经存在了，就直接返回，什么都不做。
             return
         }
     } else {

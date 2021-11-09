@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/testProject.css">
+    <link rel="stylesheet" href="/editor.md-master/css/editormd.preview.css"/>
+    <script src="/editor.md-master/editormd.js"></script>
+    <script src="/editor.md-master/lib/marked.min.js"></script>
+    <script src="/editor.md-master/lib/prettify.min.js"></script>
 </head>
 <body>
 <!--<p th:text="'Hello, ' + ${name} + '!'"/>-->
@@ -27,7 +31,18 @@
                 <span>阅读数：</span><span th:text="${questionDetail.viewCount}"></span>
             </span>
             <hr>
-            <p th:text="${questionDetail.description}"></p>
+            <div id="questionDetail-markdown-view">
+                <textarea style="display:none;" th:text="${questionDetail.description}"></textarea>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    var testView = editormd.markdownToHTML("questionDetail-markdown-view", {
+                        // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                        // htmlDecode : true,  // Enable / disable HTML tag encode.
+                        // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+                    });
+                });
+            </script>
             <hr>
             <span class="label label-info question-tag" th:each="tag : ${questionDetail.tag.split(',')}">
                 <span class="glyphicon glyphicon-tags"></span>
