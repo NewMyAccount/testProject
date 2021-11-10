@@ -146,6 +146,7 @@ public class QuestionService {
         }).collect(Collectors.toList());
     }
 
+    //搜索内容的页面展示
     public PaginationDTO list(String search, Integer page, Integer size) {
         String[] content = search.split(" ");
         String searchInfo = Arrays.asList(content).stream().collect(Collectors.joining("|"));
