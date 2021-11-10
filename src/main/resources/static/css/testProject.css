@@ -6,6 +6,7 @@ html, body {
 .main {
     background-color: white;
     margin: 30px;
+    margin-bottom: 0px;
 }
 
 .btn-publish {
@@ -114,4 +115,9 @@ html, body {
     white-space: normal;
     margin: 5px 5px;
     display: inline-block;
+}
+
+.footer{
+    padding: 10px 18%;
+    color: #666;
 }

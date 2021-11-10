@@ -87,7 +87,7 @@ public class NotificationService {
             questionList = questionMapper.selectMany(questionTitleSQL);
         }
         Map<Integer, Question> questionInfo = questionList.stream().collect(Collectors.toMap(Question::getId, question -> question));
-
+        //这个是找回复
         titleIds = notificationList.stream()
                 .filter(notificationInfo -> notificationInfo.getType().equals(NotifyTypeEnum.REPLY_TYPE.getType()))
                 .map(notificationInfo -> notificationInfo.getOuterId()).collect(Collectors.toSet());
@@ -106,7 +106,7 @@ public class NotificationService {
         List<NotificationDTO> notificationDTOList = notificationList.stream().map(notificationInfo -> {
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setId(notificationInfo.getId());
-            notificationDTO.setNotifier(usersInfo.get(notificationInfo.getReceiver()));
+            notificationDTO.setNotifier(usersInfo.get(notificationInfo.getNotifier()));
             notificationDTO.setGmtCreate(notificationInfo.getGmtCreate());
             notificationDTO.setStatus(notificationInfo.getStatus());
             if (notificationInfo.getType().equals(NotifyTypeEnum.COMMENT_TYPE.getType())) {

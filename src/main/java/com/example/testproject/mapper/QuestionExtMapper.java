@@ -16,4 +16,10 @@ import java.util.List;
 public interface QuestionExtMapper {
     @Select({"select * from question where tag regexp #{tag}"})
     List<Question> selectWithWhereClause(String tag);
+
+    @Select({"select count(*) from question where title regexp #{searchInfo}"})
+    Integer countWithSearchCondition(String searchInfo);
+
+    @Select({"select * from question where title regexp #{searchInfo} limit #{offset}, #{size}"})
+    List<Question> selectWithSearchConditionLimit(String searchInfo, Integer offset, Integer size);
 }

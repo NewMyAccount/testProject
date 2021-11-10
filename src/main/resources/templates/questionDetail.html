@@ -99,7 +99,7 @@
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded publish-person"
-                             th:src="${session.user} != null ? ${session.user.avatarUrl} : '' " alt="">
+                             th:src="${session.user} != null ? ${session.user.avatarUrl} : '/images/anonymous.jpg'" alt="">
                     </a>
                 </div>
                 <div class="media-body">
@@ -137,6 +137,6 @@
         </div>
     </div>
 </div>
-
+<div th:insert="footer :: footer"></div>
 </body>
 </html>

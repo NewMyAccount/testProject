@@ -145,4 +145,24 @@ public class QuestionService {
             return questionDTO;
         }).collect(Collectors.toList());
     }
+
+    public PaginationDTO list(String search, Integer page, Integer size) {
+        String[] content = search.split(" ");
+        String searchInfo = Arrays.asList(content).stream().collect(Collectors.joining("|"));
+        Integer num = questionExtMapper.countWithSearchCondition(searchInfo);
+        //页数少的情况下可以这么用
+        Map<String, Integer> map = pageProvider.countPageNumber(page, size, num);
+        //偏移量，从第几个数据开始找
+        int offset = size * (map.get("currentPage") - 1);
+        List<Question> selectedQuestion = questionExtMapper.selectWithSearchConditionLimit(searchInfo, offset, size);
+
+        List<QuestionDTO> questionDTOList = selectedQuestion.stream().map(question -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            Optional<User> user = userMapper.selectByPrimaryKey(question.getCreator());
+            questionDTO.setUser(user.orElse(null));
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return pageProvider.pageHelper(questionDTOList, map.get("currentPage"), map.get("totalPageNumber"));
+    }
 }

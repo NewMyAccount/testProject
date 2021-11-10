@@ -2,6 +2,7 @@ package com.example.testproject.controller;
 
 import com.example.testproject.dto.PaginationDTO;
 import com.example.testproject.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,14 +27,21 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        PaginationDTO paginationDTO = questionService.list(page, size);
+                        @RequestParam(name = "size", defaultValue = "5") Integer size,
+                        @RequestParam(name = "search", required = false) String search) {
+        PaginationDTO paginationDTO;
+        if (StringUtils.isBlank(search) || StringUtils.isEmpty(search)) {
+            paginationDTO = questionService.list(page, size);
+        } else {
+            paginationDTO = questionService.list(search, page, size);
+        }
+        model.addAttribute("search", search);
         model.addAttribute("pagination", paginationDTO);
         return "index";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response){
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().removeAttribute("user");
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
