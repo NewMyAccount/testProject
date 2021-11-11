@@ -20,6 +20,7 @@ idea:
 选中new 对象名（） ctrl + alt + v  快速new对象
 ctrl + alt + p 抽出一个参数
 ctrl + alt + m 抽出一个方法
+ctrl + shift + u 大写变小写
 
 ctrl + shift + f12 最大化窗口
 Ctrl+Alt+left/right，返回至上次浏览的位置

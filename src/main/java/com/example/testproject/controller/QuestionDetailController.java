@@ -5,6 +5,7 @@ import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.enums.CommentTypeEnum;
 import com.example.testproject.service.CommentService;
 import com.example.testproject.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import java.util.List;
  * @Time: 15:27
  **/
 @Controller
+@Slf4j
 public class QuestionDetailController {
     @Autowired
     private QuestionService questionService;

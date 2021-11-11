@@ -5,6 +5,7 @@ import com.example.testproject.dto.QuestionDTO;
 import com.example.testproject.model.Question;
 import com.example.testproject.model.User;
 import com.example.testproject.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import java.util.List;
  * @Time: 9:54
  **/
 @Controller
+@Slf4j
 public class PublishController {
     @Autowired
     private QuestionService questionService;

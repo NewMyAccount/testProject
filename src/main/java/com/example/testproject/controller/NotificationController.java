@@ -2,6 +2,7 @@ package com.example.testproject.controller;
 
 import com.example.testproject.model.User;
 import com.example.testproject.service.NotificationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Time: 11:10
  **/
 @Controller
-
+@Slf4j
 public class NotificationController {
     @Autowired
     NotificationService notificationService;

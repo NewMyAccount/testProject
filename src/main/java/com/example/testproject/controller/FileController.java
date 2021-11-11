@@ -1,6 +1,7 @@
 package com.example.testproject.controller;
 
 import com.example.testproject.dto.FileDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Time: 11:46
  **/
 @Controller
+@Slf4j
 public class FileController {
 
     @RequestMapping("/upload")

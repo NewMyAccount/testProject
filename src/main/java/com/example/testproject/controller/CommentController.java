@@ -10,6 +10,7 @@ import com.example.testproject.model.Comment;
 import com.example.testproject.model.User;
 import com.example.testproject.service.CommentService;
 import com.example.testproject.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import java.util.List;
  * @Time: 16:00
  **/
 @Controller
+@Slf4j
 public class CommentController {
     @Autowired
     CommentService commentService;

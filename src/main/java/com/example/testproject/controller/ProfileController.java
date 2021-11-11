@@ -6,6 +6,7 @@ import com.example.testproject.model.Notification;
 import com.example.testproject.model.User;
 import com.example.testproject.service.NotificationService;
 import com.example.testproject.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Time: 13:54
  **/
 @Controller
+@Slf4j
 public class ProfileController {
     @Autowired
     UserMapper userMapper;

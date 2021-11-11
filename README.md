@@ -1,4 +1,4 @@
-## zhangxin
+# zhangxin
 
 ##资料
 
@@ -64,7 +64,7 @@
 ##脚本
 
 ```sql
-    create table USER
+    create table user
 (
     ID           INT auto_increment primary key NOT NULL ,
     ACCOUNT_ID   VARCHAR(100),
@@ -77,6 +77,27 @@
 
 ```bash
 mvn flyway:migrate
+mvn flaway:repair
 mvn -D mybatis.generator.overwrite=true mybatis-generator:generate
-
+数据库脚本全部小写
 ```
+
+##部署
+
+###依赖
+-git ---拉代码
+-JDK ---编译
+-Maven ---构建项目
+-Mysql ---搭建数据库
+###步骤
+- yum update
+- yum install git
+- yum install maven
+- mkdir App
+- cd App
+- git clone 地址
+- mvn (clean) compile package
+- cp 配置文件 配置文件生产
+- mvn package
+- java -jar -D spring.profiles.active=production target/SNAPSHOT.jar
+- ps -aux | grep java

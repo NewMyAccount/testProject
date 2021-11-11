@@ -2,6 +2,7 @@ package com.example.testproject.controller;
 
 import com.example.testproject.dto.PaginationDTO;
 import com.example.testproject.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  **/
 
 @Controller
+@Slf4j
 public class IndexController {
     @Autowired
     private QuestionService questionService;

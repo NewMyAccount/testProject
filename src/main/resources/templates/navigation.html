@@ -38,10 +38,10 @@
                                         <h4 class="modal-title">登陆方式</h4>
                                     </div>
                                     <div class="modal-body" style="text-align:center">
-                                        <a href="https://github.com/login/oauth/authorize?client_id=e6dedd08826359276765&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
+                                        <a th:href="@{https://github.com/login/oauth/authorize(client_id='e6dedd08826359276765', redirect_uri=${#httpServletRequest.getRequestURL()+'callback'}, scope='user', state=1)}">
                                             <img src="/images/github.jpg" height="50px" width="50px" alt="">
                                         </a>
-                                        <a href="http://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=SmzQr4CAxTazikFlwnfCGvmzFLSzlIXL&redirect_uri=http://localhost:8887/baiducallback&scope=basic,netdisk&display=page&qrcode=1">
+                                        <a th:href="@{http://openapi.baidu.com/oauth/2.0/authorize(response_type='code', client_id='SmzQr4CAxTazikFlwnfCGvmzFLSzlIXL', redirect_uri=${#httpServletRequest.getRequestURL() + 'baiducallback'}, scope='basic,netdisk', display='page', qrcode=1)}">
                                             <img src="/images/baidu.jpg" height="50px" width="50px" alt="">
                                         </a>
                                     </div>
