@@ -7,6 +7,7 @@ import com.example.testproject.model.User;
 import com.example.testproject.provider.BaiduProvider;
 import com.example.testproject.provider.GithubProvider;
 import com.example.testproject.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import java.util.UUID;
 */
 
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
@@ -81,6 +83,7 @@ public class AuthorizeController {
             //request.getSession().setAttribute("githubUser", githubUser);
             return "redirect:/";
         }
+        log.error("callback get github error, {}", githubUser);
         return "redirect:/";
     }
 
