@@ -1,5 +1,6 @@
 package com.example.testproject.controller;
 
+import com.example.testproject.cache.HotTagCache;
 import com.example.testproject.dto.PaginationDTO;
 import com.example.testproject.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 public class IndexController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private HotTagCache hotTagCache;
 
     @GetMapping("/")
     public String index(Model model,
@@ -39,6 +42,7 @@ public class IndexController {
         }
         model.addAttribute("search", search);
         model.addAttribute("pagination", paginationDTO);
+        model.addAttribute("hotTags", hotTagCache.getTags());
         return "index";
     }
 

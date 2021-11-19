@@ -51,7 +51,13 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热点话题</h3>
+            <h3 style="padding: 5px 0">热点话题</h3>
+            <hr>
+            <ul class="hotTags">
+                <li th:each="hotTag : ${hotTags}">
+                    <a href="#" th:text="${hotTag.name}"></a>
+                </li>
+            </ul>
         </div>
     </div>
 

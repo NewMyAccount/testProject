@@ -2,8 +2,6 @@ package com.example.testproject.service;
 
 import com.example.testproject.dto.NotificationDTO;
 import com.example.testproject.dto.PaginationDTO;
-import com.example.testproject.dto.QuestionDTO;
-import com.example.testproject.enums.CommentTypeEnum;
 import com.example.testproject.enums.NotifyStatusEnum;
 import com.example.testproject.enums.NotifyTypeEnum;
 import com.example.testproject.exception.CustomErrorCode;
@@ -17,7 +15,6 @@ import com.example.testproject.provider.PageProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

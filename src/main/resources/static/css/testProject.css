@@ -106,6 +106,14 @@ html, body {
     text-decoration: crimson;
 }
 
+.hotTags {
+    line-height: 20px;
+    font-size: 12px;
+    list-style: none;
+    text-decoration: crimson;
+    padding: 16px 0;
+}
+
 .question-tagCategory {
     margin: 5px 0;
 }
